@@ -1,0 +1,11 @@
+[
+    {
+        "name": "History in Sidebar",
+        "description": "Adds a shortcut to recently played songs in the sidebar.",
+        "preview": "preview.png",
+        "readme": "README.md",
+        "tags": [
+            "shortcut"
+        ]
+    }
+]
