@@ -2,8 +2,8 @@
     {
         "name": "History in Sidebar",
         "description": "Adds a shortcut to recently played songs in the sidebar.",
-        "preview": "preview.png",
-        "readme": "README.md",
+        "preview": "CustomApps/history-in-sidebar/preview.png",
+        "readme": "CustomApps/history-in-sidebar/README.md",
         "tags": [
             "shortcut"
         ]
