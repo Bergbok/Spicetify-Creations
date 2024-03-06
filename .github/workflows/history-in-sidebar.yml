@@ -23,7 +23,7 @@ jobs:
                   node-version: 20
 
             - name: Install dependencies
-              working-directory: ./
+              working-directory: CustomApps/history-in-sidebar/
               run: npm ci
 
             - name: Build
