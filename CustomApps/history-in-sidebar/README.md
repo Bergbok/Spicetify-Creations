@@ -1,7 +1,7 @@
 # History in Sidebar
 
-<p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/53d3104d-4532-4d62-9e66-af5443a224af"/></img>
+<p align="left">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/ded310d5-374a-4238-98b1-bd2fad737604"/></img>
 </p>
 
 Adds a shortcut for the "Recently Played" screen to the sidebar.
