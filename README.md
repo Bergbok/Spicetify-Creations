@@ -3,11 +3,16 @@
 This repository contains my custom Spicetify apps and extensions.
 
 ## Custom Apps
-[Installation](https://spicetify.app/docs/advanced-usage/custom-apps/)
 
-<hr>
+### History in Sidebar
 
-### [History in Sidebar](/CustomApps/history-in-sidebar/README.md)
+<p align="left">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/ded310d5-374a-4238-98b1-bd2fad737604"/></img>
+</p>
+
+Adds a shortcut for the "Recently Played" screen to the sidebar.
+
+More info: [README](/CustomApps/history-in-sidebar/README.md)
 
 ## License
 
