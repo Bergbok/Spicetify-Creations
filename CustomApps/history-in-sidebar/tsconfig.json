@@ -10,7 +10,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": [
-    "./src/**/*.*"
-  ]
+  "include": ["./src/**/*", "../../libs/shared/src/types/**/*"]
 }
