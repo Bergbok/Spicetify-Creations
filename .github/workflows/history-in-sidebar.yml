@@ -1,4 +1,4 @@
-name: History In Sidebar Publish
+name: Publish history-in-sidebar 
 
 on:
     push:
@@ -29,13 +29,10 @@ jobs:
             - name: Build
               run: npm run build-local
               
-            - name: Copy Readme
+            - name: Copy README
               run: cp README.md ./dist/README.md
-
-            - name: Copy preview
-              run: cp preview.png ./dist/preview.png
               
-            - name: Deploy
+            - name: Publish to seperate branch
               uses: s0/git-publish-subdir-action@develop
               env:
                   REPO: self
