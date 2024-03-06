@@ -1,6 +1,6 @@
 {
   "name": "history-in-sidebar",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "spicetify-creator",
