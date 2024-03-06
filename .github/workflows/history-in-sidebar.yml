@@ -31,6 +31,9 @@ jobs:
               
             - name: Copy README
               run: cp README.md ./dist/README.md
+
+            - name: Copy preview
+              run: cp README.md ./dist/preview.png          
               
             - name: Publish to seperate branch
               uses: s0/git-publish-subdir-action@develop
