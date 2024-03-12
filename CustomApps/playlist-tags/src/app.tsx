@@ -62,10 +62,6 @@ const App = () => {
     });
   }, [filterQuery]);
 
-  useEffect(() => {
-    console.log('Loading state: ', isLoading);
-  }, [isLoading]);
-
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterQuery(event.target.value);
   };
