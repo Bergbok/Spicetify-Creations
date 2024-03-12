@@ -138,20 +138,27 @@ async function processItem(item: any, tag: string, operation: MassTagOperation) 
       await processItem(item.items[i], tag, operation);
     }
   } else if (item.type === 'playlist') {
+    const item_tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + item.uri.replace('spotify:playlist:','')) || '[]');
     switch (operation) {
       case MassTagOperation.AddLocalFilesTag:
-        const playlist_contents: PlaylistContents = await Spicetify.Platform.PlaylistAPI.getContents(item.uri);
-        const contains_local_files = playlist_contents.items.some(item => item.isLocal);
-        if (contains_local_files) {
-          appendTag([item.uri.replace('spotify:playlist:','')], tag);
-          console.log('Added "' + tag + '" tag to', item.uri);
+        if (!item_tags.includes('[contains-local-files]')) {
+          const playlist_contents: PlaylistContents = await Spicetify.Platform.PlaylistAPI.getContents(item.uri);
+          const contains_local_files = playlist_contents.items.some(item => item.isLocal);
+          if (contains_local_files) {
+            appendTag([item.uri.replace('spotify:playlist:','')], tag);
+            console.log('Added "' + tag + '" tag to', item.uri);
+          }
+          break;
         }
         break;
       case MassTagOperation.AddCreatorDisplayNameTag:
-        const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
-        const creator_display_name = playlist_metadata.owner.displayName.replace(' ', '-');
-        appendTag([item.uri.replace('spotify:playlist:','')], '[by:' + creator_display_name + ']');
-        console.log('Added "[by:' + creator_display_name + ']" tag to', item.uri);
+        if (!item_tags.some((tag: string) => tag.startsWith('[by:'))) {
+          const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
+          const creator_display_name = playlist_metadata.owner.displayName.replace(' ', '-');
+          appendTag([item.uri.replace('spotify:playlist:','')], '[by:' + creator_display_name + ']');
+          console.log('Added "[by:' + creator_display_name + ']" tag to', item.uri);
+          break;
+        }
         break;
     }
   }
