@@ -50,18 +50,23 @@ function registerSettings() {
     Spicetify.showNotification('Imported ' + imported_tag_count + ' tags!');
   });
 
-  settings.addButton('button-export-tags', 'Export tags to clipboard', 'Export', async () => {
+  settings.addButton('button-export-tags', 'Export playlist tags to clipboard', 'Export', async () => {
     await Spicetify.Platform.ClipboardAPI.copy(exportTags());
     Spicetify.showNotification('Tags copied to clipboard!');
   });
 
-  settings.addButton('button-add-creator-displayname-tag-to-all', 'Add creator tag to all playlists', 'Add', async () => {
-    appendCreatorDisplayNameTagToAllPlaylists();
-    Spicetify.showNotification('Processing playlists');
+  settings.addButton('button-export-tags-excluding-lcontains-local-files', 'Export playlist tags (excluding those tagged as [contains-local-files])', 'Export', async () => {
+    await Spicetify.Platform.ClipboardAPI.copy(exportTags(true));
+    Spicetify.showNotification('Tags copied to clipboard!');
   });
 
   settings.addButton('button-add-contains-local-files-tag-to-all-containing', 'Add "contains-local-files" tag to all playlists containing local files', 'Add', async () => {
     appendTagToAllPlaylistsContainingLocalFiles('[contains-local-files]');
+    Spicetify.showNotification('Processing playlists');
+  });
+
+  settings.addButton('button-add-creator-displayname-tag-to-all', 'Add creator tag to all playlists', 'Add', async () => {
+    appendCreatorDisplayNameTagToAllPlaylists();
     Spicetify.showNotification('Processing playlists');
   });
 

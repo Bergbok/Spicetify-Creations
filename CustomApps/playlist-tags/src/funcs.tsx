@@ -324,11 +324,15 @@ export function importTags(tags: string) {
   return tag_array.length;
 };
 
-export function exportTags() {
+export function exportTags(exclude_contains_local_files_tag?: boolean) {
   let exported_tags: string = '';
   getAllTagKeys().forEach(key => {
     if (!key.startsWith('tags:cache:')){
-      exported_tags += key + ' === ' + Spicetify.LocalStorage.get(key) + '\n';
+      let key_value = Spicetify.LocalStorage.get(key);
+      if (key_value?.includes('[contains-local-files]') && exclude_contains_local_files_tag) {
+        return;
+      }
+      exported_tags += key + ' === ' + key_value + '\n';
     }
   });
   return exported_tags;
