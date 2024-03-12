@@ -245,7 +245,8 @@ const App = () => {
                           Spicetify.Platform.History.push('/playlist-tags/' + tag);
                         }
                         setActiveLink('Search');
-                      }}>{tag}
+                      }}
+                      onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>{tag}
                     </Chip>
                   ))
                 }
