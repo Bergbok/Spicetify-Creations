@@ -219,26 +219,7 @@ export function getAllTags(sorting_option: string) {
     return unique_values;
   }, []);
 
-  // Matches tags that are wrapped in square brackets
-  const regex = /\[(.*?)\]/;
-
-  let non_matching_tags = unique_tags.filter(tag => !regex.test(tag));
-  let matching_tags = unique_tags.filter(tag => regex.test(tag));
-
-  switch (sorting_option) {
-    case (sorting_option = 'A-Z'):
-      non_matching_tags.sort((a, b) => a.localeCompare(b));
-      matching_tags.sort((a, b) => a.localeCompare(b));
-      break;
-    case (sorting_option = 'Z-A'):
-      non_matching_tags.sort((a, b) => b.localeCompare(a));
-      matching_tags.sort((a, b) => b.localeCompare(a));
-      break;
-    default:
-      break;
-  }
-
-  unique_tags = [...non_matching_tags, ...matching_tags];
+  sortTags(unique_tags, sorting_option);
 
   return unique_tags;
 };
@@ -507,6 +488,29 @@ function sortByDescription(playlist_data: PlaylistMetadata[], order: string) {
   return playlist_data;
 };
 
+function sortTags(tags: string[], sorting_option: string) {
+    // Matches tags that are wrapped in square brackets
+    const regex = /\[(.*?)\]/;
+
+    let non_matching_tags = tags.filter(tag => !regex.test(tag));
+    let matching_tags = tags.filter(tag => regex.test(tag));
+  
+    switch (sorting_option) {
+      case (sorting_option = 'A-Z'):
+        non_matching_tags.sort((a, b) => a.localeCompare(b));
+        matching_tags.sort((a, b) => a.localeCompare(b));
+        break;
+      case (sorting_option = 'Z-A'):
+        non_matching_tags.sort((a, b) => b.localeCompare(a));
+        matching_tags.sort((a, b) => b.localeCompare(a));
+        break;
+      default:
+        break;
+    }
+  
+    return [...non_matching_tags, ...matching_tags];
+};
+
 //////////////////////////////////////// DISPLAY FUNCTIONS /////////////////////////////////////////
 
 export function handlePageChange(location: Location) {
@@ -608,7 +612,7 @@ export async function renderPlaylistPageElements(tags: string[]) {
         `}
       </style>
       {
-        tags.sort((a, b) => a.localeCompare(b)).map((tag) => (
+        sortTags(tags, 'A-Z').map((tag) => (
           <Chip
             className='tag-list-tag'
             semanticColor='textBase'
@@ -625,8 +629,7 @@ export async function renderPlaylistPageElements(tags: string[]) {
         className='tag-list-button'
         semanticColor="textBase"
         dangerouslySetInnerHTML={{ __html: Spicetify.SVGIcons["edit"] }}
-        onClick={() => appendTag([getCurrentURI()])}
-      >
+        onClick={() => appendTag([getCurrentURI()])}>
       </Spicetify.ReactComponent.IconComponent>
     </React.Fragment>
   );
