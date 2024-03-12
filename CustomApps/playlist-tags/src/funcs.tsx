@@ -57,7 +57,11 @@ export function removeTagFromAllPlaylists(tag_to_remove: string) {
         tags = tags.filter((t: string) => t !== tag_to_remove);
 
         // Update the tags in local storage
-        Spicetify.LocalStorage.set(key, JSON.stringify(tags));
+        try {
+          Spicetify.LocalStorage.set(key, JSON.stringify(tags)); 
+        } catch (DOMExcpection) {
+          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+        }
 
         // Break the loop as the tag has been found and removed
         break;
@@ -77,7 +81,13 @@ function appendTag(playlist_uris: string[], tag?: string) {
         }
         return unique_tags;
       }, [...current_tags]);
-      Spicetify.LocalStorage.set('tags:' + playlist_uri, JSON.stringify(new_tags));
+
+      try {
+        Spicetify.LocalStorage.set('tags:' + playlist_uri, JSON.stringify(new_tags)); 
+      } catch (DOMExcpection) {
+        Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+      }
+
       if (current_value === null) {
         registerPlaylistAsTagged(playlist_uri);
       }
@@ -107,7 +117,13 @@ function removeTag(playlist_uri: string, tag: string) {
   let current_value = Spicetify.LocalStorage.get('tags:' + playlist_uri);
   let current_tags = current_value ? JSON.parse(current_value) : [];
   let new_tags = current_tags.filter((t: string) => t !== tag);
-  Spicetify.LocalStorage.set('tags:' + playlist_uri, JSON.stringify(new_tags));
+
+  try {
+    Spicetify.LocalStorage.set('tags:' + playlist_uri, JSON.stringify(new_tags));  
+  } catch (DOMExcpection) {
+    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+  }
+  
   if (new_tags.length === 0) {
     deregisterPlaylistAsTagged(playlist_uri);
   }
@@ -121,7 +137,11 @@ function registerPlaylistAsTagged(playlist_uri: string) {
     tagged_playlists.push(playlist_uri);
   }
 
-  Spicetify.LocalStorage.set('tags:taggedPlaylistURIs', JSON.stringify(tagged_playlists));
+  try {
+    Spicetify.LocalStorage.set('tags:taggedPlaylistURIs', JSON.stringify(tagged_playlists));
+  } catch (DOMExcpection) {
+    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+  }
 };
 
 function deregisterPlaylistAsTagged(playlist_uri: string) {
@@ -129,7 +149,12 @@ function deregisterPlaylistAsTagged(playlist_uri: string) {
   const stored_value = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
   const tagged_playlists = stored_value ? JSON.parse(stored_value) : [];
   const filtered_playlists = tagged_playlists.filter((uri: string) => uri !== playlist_uri);
-  Spicetify.LocalStorage.set('tags:taggedPlaylistURIs', JSON.stringify(filtered_playlists));
+
+  try {
+    Spicetify.LocalStorage.set('tags:taggedPlaylistURIs', JSON.stringify(filtered_playlists));
+  } catch (DOMExcpection) {
+    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+  }
 };
 
 async function processItem(item: any, tag: string, operation: MassTagOperation) {
@@ -154,7 +179,9 @@ async function processItem(item: any, tag: string, operation: MassTagOperation) 
       case MassTagOperation.AddCreatorDisplayNameTag:
         if (!item_tags.some((tag: string) => tag.startsWith('[by:'))) {
           const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
-          const creator_display_name = playlist_metadata.owner.displayName.replace(' ', '-');
+          // Multiple .replace() calls are used because one seemingly doesn't cut it for playlists owned by The Sounds of Spotify. 
+          // Try it yourself with: spotify:playlist:7vppw6zi3RPkuHAOleV5VU
+          const creator_display_name = playlist_metadata.owner.displayName.replace(' ', '-').replace(' ','-').replace(' ','-');
           appendTag([item.uri.replace('spotify:playlist:','')], '[by:' + creator_display_name + ']');
           console.log('Added "[by:' + creator_display_name + ']" tag to', item.uri);
           break;
@@ -220,7 +247,11 @@ export async function getPlaylistMetadata(playlist_uris: string[]) {
 
     const playlist_metadata = await Spicetify.Platform.PlaylistAPI.getMetadata('spotify:playlist:' + uri);
     if (use_cache) {
-      Spicetify.LocalStorage.set('tags:cache:metadata:' + uri, JSON.stringify(trimMetadata(playlist_metadata)));
+      try {
+        Spicetify.LocalStorage.set('tags:cache:metadata:' + uri, JSON.stringify(trimMetadata(playlist_metadata)));
+      } catch (DOMExcpection) {
+        Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+      }
     }
     return playlist_metadata;
   }));
@@ -326,10 +357,18 @@ export function getLocalStorageKeySizes() {
 
 export function importTags(tags: string) {
   let tag_array = tags.split('\n');
+  let error_encountered = false;
   tag_array.forEach(tag => {
-    let split = tag.split(' === ');
-    if (split.length === 2) {
-      Spicetify.LocalStorage.set(split[0], split[1]);
+    if (!error_encountered) {
+      const split = tag.split(' === ');
+      if (split.length === 2) {
+        try {
+          Spicetify.LocalStorage.set(split[0], split[1]);
+        } catch (DOMExcpection) {
+          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+          error_encountered = true;
+        }
+      }
     }
   });
   return tag_array.length;
@@ -370,7 +409,11 @@ export async function addPlaylistsToQueue(playlists: PlaylistMetadata[], shuffle
         playlist_contents = JSON.parse(contents_cache);
       } else {
         playlist_contents = await Spicetify.Platform.PlaylistAPI.getContents(playlist.uri);
-        Spicetify.LocalStorage.set('tags:cache:contents:' + playlist.uri.replace('spotify:playlist:', ''), JSON.stringify(trimContents(playlist_contents)));
+        try {
+          Spicetify.LocalStorage.set('tags:cache:contents:' + playlist.uri.replace('spotify:playlist:', ''), JSON.stringify(trimContents(playlist_contents)));
+        } catch (DOMExcpection) {
+          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+        }
       }
     } else {
       playlist_contents = await Spicetify.Platform.PlaylistAPI.getContents(playlist.uri);
