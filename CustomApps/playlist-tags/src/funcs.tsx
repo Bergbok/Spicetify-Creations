@@ -208,24 +208,39 @@ function findFolder(root: any, folder_uri: string): any {
 
 ////////////////////////////////////// GENERAL GET FUNCTIONS ///////////////////////////////////////
 
-// TO-DO: Make this more efficient using tags:taggedPlaylistURIs's value
-export function getAllTags() {
-  const excluded_keys = ['tags:taggedPlaylistURIs'];
-  let values = Object.keys(localStorage)
-    .filter((key) => key.startsWith('tags:') && !key.startsWith('tags:cache:') && !excluded_keys.includes(key))
-    .map((key) => Spicetify.LocalStorage.get(key))
-    .filter((value): value is string => value !== null)
-    .reduce((uniqueValues: string[], tags) => {
-      const tagArray: string[] = JSON.parse(tags);
-      tagArray.forEach(tag => {
-        if (!uniqueValues.includes(tag)) {
-          uniqueValues.push(tag);
-        }
-      });
-      return uniqueValues;
-    }, []);
-  values = values.sort((a, b) => a.localeCompare(b));
-  return values;
+export function getAllTags(sorting_option: string) {
+  let unique_tags: string[] = JSON.parse(Spicetify.LocalStorage.get('tags:taggedPlaylistURIs') || '[]').reduce((unique_values: string[], uri: string) => {
+    const tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + uri) || '[]');
+    tags.forEach((tag: string) => {
+      if (!unique_values.includes(tag)) {
+        unique_values.push(tag);
+      }
+    });
+    return unique_values;
+  }, []);
+
+  // Matches tags that are wrapped in square brackets
+  const regex = /\[(.*?)\]/;
+
+  let non_matching_tags = unique_tags.filter(tag => !regex.test(tag));
+  let matching_tags = unique_tags.filter(tag => regex.test(tag));
+
+  switch (sorting_option) {
+    case (sorting_option = 'A-Z'):
+      non_matching_tags.sort((a, b) => a.localeCompare(b));
+      matching_tags.sort((a, b) => a.localeCompare(b));
+      break;
+    case (sorting_option = 'Z-A'):
+      non_matching_tags.sort((a, b) => b.localeCompare(a));
+      matching_tags.sort((a, b) => b.localeCompare(a));
+      break;
+    default:
+      break;
+  }
+
+  unique_tags = [...non_matching_tags, ...matching_tags];
+
+  return unique_tags;
 };
 
 export function getCurrentURI() {

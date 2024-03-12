@@ -29,7 +29,7 @@ const App = () => {
   const [shuffleState, setIsEnabled] = useState(false);
   const [inputFocused, setIsFocused] = useState(false);
   const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
-  const [tagList, setTags] = useState(getAllTags());
+  const [tagList, setTags] = useState(getAllTags('A-Z'));
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const App = () => {
   };
 
   const updateTagList = () => {
-    setTags(getAllTags());
+    setTags(getAllTags('A-Z'));
   };
 
   switch (activeLink) {
@@ -168,24 +168,13 @@ const App = () => {
             </div>
             <div className='tag-list-wrapper'>
               {
-                tagList.sort((a, b) => {
-                  if (filterQuery.includes(a) && filterQuery.includes(b)) {
-                    return 0;
-                  }
-                  if (filterQuery.includes(a)) {
-                    return -1;
-                  }
-                  if (filterQuery.includes(b)) {
-                    return 1;
-                  }
-                  return a.localeCompare(b);
-                }).map((tag) => {
+                tagList.map((tag) => {
                   const last_term: string = (filterQuery.split(' ').pop() as string) || '';
                   if (tag.includes(last_term)) {
                     return (
                       <SpotifyChip
-                        className='tag-list-tag'
                         // selectedColorSet={filterQuery.split(' ').includes(tag) ? 'positive' : 'negative'}
+                        className='tag-list-tag'
                         style={{ 
                           backgroundColor: filterQuery.split(' ').includes(tag) ? 'var(--spice-selected-row)' : '', 
                         }}
