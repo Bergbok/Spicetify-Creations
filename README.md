@@ -12,7 +12,7 @@ This repository contains my custom Spicetify apps and extensions.
 
 Adds a shortcut for the "Recently Played" screen to the sidebar.
 
-More info: [README](/CustomApps/history-in-sidebar/README.md)
+[Read more...](/CustomApps/history-in-sidebar/README.md)
 
 ## License
 
