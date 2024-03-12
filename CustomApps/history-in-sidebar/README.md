@@ -1,6 +1,6 @@
 # History in Sidebar
 
-<p align="left">
+<p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/ded310d5-374a-4238-98b1-bd2fad737604"/></img>
 </p>
 
@@ -18,3 +18,7 @@ Saves one full click!
 6. Run `spicetify apply`
 
 > If you get stuck check out [Spicetify's official guide](https://spicetify.app/docs/advanced-usage/custom-apps/).
+
+## License
+
+This repository is licensed under the [MIT License](https://github.com/Bergbok/Spicetify-Creations/blob/main/LICENSE).
