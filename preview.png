@@ -18,3 +18,7 @@ Saves one full click!
 6. Run `spicetify apply`
 
 > If you get stuck check out [Spicetify's official guide](https://spicetify.app/docs/advanced-usage/custom-apps/).
+>
+> ## License
+
+This repository is licensed under the [MIT License](../../LISCENSE).
