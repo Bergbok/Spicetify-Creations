@@ -1,0 +1,6 @@
+{
+  "displayName": "Tags",
+  "nameId": "playlist-tags",
+  "icon": "assets/icon-unfilled.svg",
+  "activeIcon": "assets/icon-filled.svg"
+}

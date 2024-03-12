@@ -2,10 +2,21 @@
     {
         "name": "History in Sidebar",
         "description": "Adds a shortcut to recently played songs in the sidebar.",
-        "preview": "CustomApps/history-in-sidebar/preview.png",
-        "readme": "CustomApps/history-in-sidebar/README.md",
+        "preview": "preview.png",
+        "readme": "README.md",
+        "branch": "dist/history-in-sidebar",
         "tags": [
             "shortcut"
+        ]
+    },
+    {
+        "name": "Playlist Tags",
+        "description": "Allows you to tag playlists and filter playlists by tag.",
+        "preview": "preview.png",
+        "readme": "README.md",
+        "branch": "dist/playlist-tags",
+        "tags": [
+            "tags"
         ]
     }
 ]
