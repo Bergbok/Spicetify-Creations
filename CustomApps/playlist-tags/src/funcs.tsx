@@ -181,7 +181,7 @@ function findFolder(root: any, folder_uri: string): any {
 
 ////////////////////////////////////// GENERAL GET FUNCTIONS ///////////////////////////////////////
 
-// TO-DO: Make this more efficient using tags:taggedPlaylistURIs value
+// TO-DO: Make this more efficient using tags:taggedPlaylistURIs's value
 export function getAllTags() {
   const excluded_keys = ['tags:taggedPlaylistURIs'];
   let values = Object.keys(localStorage)
@@ -209,11 +209,15 @@ export async function getPlaylistMetadata(playlist_uris: string[]) {
   const use_cache = JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.use-metadata-cache') || 'false').value;
   const data = await Promise.all(playlist_uris.map(async (uri) => {
     if (use_cache) {
-      const metadata_cache = Spicetify.LocalStorage.get('tags:cache:metadata:' + uri);
-      if (metadata_cache) {
-        return JSON.parse(metadata_cache);
+      let metadata_cache: PlaylistMetadata;
+      const value = Spicetify.LocalStorage.get('tags:cache:metadata:' + uri)
+      if (value) {
+        metadata_cache = JSON.parse(value);
+        metadata_cache.uri = 'spotify:playlist:' + uri;
+        return metadata_cache;
       }
     }
+
     const playlist_metadata = await Spicetify.Platform.PlaylistAPI.getMetadata('spotify:playlist:' + uri);
     if (use_cache) {
       Spicetify.LocalStorage.set('tags:cache:metadata:' + uri, JSON.stringify(trimMetadata(playlist_metadata)));
@@ -257,13 +261,13 @@ function getFolderPlaylistURIs(folder_data: any) {
 
 function trimContents(playlist_contents: PlaylistContents) {
   return {
-    items: playlist_contents.items.map(item => ({ uri: item.uri })),
+    items: playlist_contents.items.map(item => ({ uri: item.uri.replace('spotify:local:', '').replace('spotify:track:', '')})),
   };
 };
 
 function trimMetadata(playlist_metadata: PlaylistMetadata) {
   return {
-    uri: playlist_metadata.uri,
+    uri: playlist_metadata.uri.replace('spotify:playlist:', ''),
     name: playlist_metadata.name,
     description: playlist_metadata.description,
     images: [playlist_metadata.images[0]]
@@ -356,11 +360,13 @@ export async function addPlaylistsToQueue(playlists: PlaylistMetadata[], shuffle
   Spicetify.showNotification('Processing ' + playlists.length + ' playlists...');
   const use_cache = JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.use-contents-cache') || 'false').value;
   let track_list: Spicetify.ContextTrack[] = [];
+  var contents_cache: string = '';
   for (const playlist of playlists) {
     let playlist_contents: PlaylistContents;
+
     if (use_cache) {
-      const contents_cache = Spicetify.LocalStorage.get('tags:cache:contents:' + playlist.uri.replace('spotify:playlist:', ''));
-      if (contents_cache) {
+      contents_cache = Spicetify.LocalStorage.get('tags:cache:contents:' + playlist.uri.replace('spotify:playlist:', '')) || '';
+      if (contents_cache !== '') {
         playlist_contents = JSON.parse(contents_cache);
       } else {
         playlist_contents = await Spicetify.Platform.PlaylistAPI.getContents(playlist.uri);
@@ -369,9 +375,20 @@ export async function addPlaylistsToQueue(playlists: PlaylistMetadata[], shuffle
     } else {
       playlist_contents = await Spicetify.Platform.PlaylistAPI.getContents(playlist.uri);
     }
-    playlist_contents.items.forEach(track => {
-      track_list.push({uri: track.uri});
-    });
+
+    if (contents_cache) {
+      playlist_contents.items.forEach(track => {
+        if (Spicetify.URI.isLocal('spotify:local:' + track.uri)) {
+          track_list.push({uri: 'spotify:local:' + track.uri});
+        } else {
+          track_list.push({uri: 'spotify:track:' + track.uri});
+        }
+      });
+    } else {
+      playlist_contents.items.forEach(track => {
+        track_list.push({uri: track.uri});
+      });
+    }
   }
 
   if (shuffle) {
