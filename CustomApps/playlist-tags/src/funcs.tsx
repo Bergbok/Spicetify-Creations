@@ -342,7 +342,7 @@ export function exportTags(exclude_contains_local_files_tag?: boolean) {
       exported_tags += key + ' === ' + key_value + '\n';
     }
   });
-  return exported_tags;
+  return exported_tags.replace(/\n$/, '');
 };
 
 function getAllTagKeys() {
