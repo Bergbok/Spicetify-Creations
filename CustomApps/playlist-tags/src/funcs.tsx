@@ -219,7 +219,7 @@ export function getAllTags(sorting_option: string) {
     return unique_values;
   }, []);
 
-  sortTags(unique_tags, sorting_option);
+  unique_tags = sortTags(unique_tags, sorting_option);
 
   return unique_tags;
 };
