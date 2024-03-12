@@ -30,6 +30,7 @@ const App = () => {
   const [inputFocused, setIsFocused] = useState(false);
   const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
   const [tagList, setTags] = useState(getAllTags());
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (activeLink === "Search") {
@@ -52,10 +53,18 @@ const App = () => {
   useEffect(() => {
     Spicetify.Platform.History.replace('/playlist-tags/' + filterQuery);
     const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '));
+
+    setIsLoading(true);
+
     getPlaylistMetadata(playlist_uris).then(data => {
       setPlaylistData(data);
+      setIsLoading(false);
     });
   }, [filterQuery]);
+
+  useEffect(() => {
+    console.log('Loading state: ', isLoading);
+  }, [isLoading]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterQuery(event.target.value);
@@ -180,6 +189,7 @@ const App = () => {
                     return (
                       <SpotifyChip
                         className='tag-list-tag'
+                        // selectedColorSet={filterQuery.split(' ').includes(tag) ? 'positive' : 'negative'}
                         style={{ 
                           backgroundColor: filterQuery.split(' ').includes(tag) ? 'var(--spice-selected-row)' : '', 
                         }}
@@ -190,7 +200,7 @@ const App = () => {
                             setFilterQuery(filterQuery.split(' ').slice(0, -1).join(' ') + ' ' + tag + ' ');
                           }
                         }}
-                        onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>
+                        onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>{/* {tag} */}
                         <p dangerouslySetInnerHTML={{ __html: `<span style="color: ${filterQuery.split(' ').includes(tag) ? 'black' : 'var(--spice-text)'}">${tag}</span>` }}></p>
                       </SpotifyChip>
                     );
@@ -200,7 +210,7 @@ const App = () => {
             </div>
           </React.Fragment>
           {
-            playlistData && renderPlaylists(playlistData, selectedSortingOption)
+            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading)
           }
           {navBar}
         </>
@@ -249,7 +259,7 @@ const App = () => {
       return (
         <>
           {
-            playlistData && renderPlaylists(playlistData, selectedSortingOption)
+            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading)
           }
           {navBar}
         </>

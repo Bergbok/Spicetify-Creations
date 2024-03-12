@@ -438,7 +438,7 @@ export function handlePageChange(location: Location) {
     }
 };
 
-export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_option: string) {
+export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_option: string, is_loading: boolean) {
   switch (sorting_option) {
     case 'Title: A-Z':
       playlist_data.sort((a, b) => a.name.localeCompare(b.name));
@@ -471,21 +471,31 @@ export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_optio
           width: 100%;
           height: 100%;
         }
+        .loading-text {
+          font-size: 50px;
+          text-align: center;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
       `}
       </style>
-      <div className='card-wrapper'>
-        {
-          playlist_data.map((playlist: PlaylistMetadata) => (
-            <SpotifyCard 
-              className = 'playlist-card'
-              type = "playlist" 
-              uri = {playlist.uri} 
-              header = {playlist.name}
-              subheader = {playlist.description}
-              imageUrl = {playlist.images[0]?.url}/>
-          ))
-        }
-      </div>
+      {is_loading ? (<h1 className='loading-text'>Loading...</h1>) : (
+        <div className='card-wrapper'>
+          {
+            playlist_data.map((playlist: PlaylistMetadata) => (
+              <SpotifyCard 
+                className = 'playlist-card'
+                type = "playlist" 
+                uri = {playlist.uri} 
+                header = {playlist.name}
+                subheader = {playlist.description}
+                imageUrl = {playlist.images[0]?.url}/>
+            ))
+          }
+        </div>
+      )}
     </React.Fragment>
   );
 };
