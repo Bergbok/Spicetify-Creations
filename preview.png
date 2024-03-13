@@ -58,7 +58,7 @@ The import/export tags option can be used to import tags from other users as wel
 ## Installation
 
 1. Install Spicetify ([guide](https://spicetify.app/docs/advanced-usage/installation))
-2. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/playlist-tags.zip).
+2. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/playlist-tags.zip)
 3. Run `spicetify config-dir` in a terminal
 4. Extract the zip into the CustomApps folder
 5. Rename the extracted folder to `playlist-tags`
