@@ -15,7 +15,7 @@ const README = ({ raw_url, GitHub_button_url: GitHub_button_url }: READMEProps) 
       .then(response => response.text())
       .then(text => { 
         // Removes links and installation section
-        let stripped_markdown = text.replace(/\[(.*?)\]\(.*?\)/g, ''); 
+        let stripped_markdown = text.replace(/\[(.*?)\]\(.*?\)/g, '$1'); 
         stripped_markdown = stripped_markdown.replace(/\n## Installation[\s\S]*?(?=##|$)/g, '');
         setMarkdown(stripped_markdown);
       });
