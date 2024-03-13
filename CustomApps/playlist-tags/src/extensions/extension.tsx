@@ -47,7 +47,7 @@ function registerSettings() {
 
   settings.addButton('button-import-tags', 'Import tags from clipboard', 'Import', async () => {
     const imported_tag_count = importTags(await Spicetify.Platform.ClipboardAPI.paste());
-    Spicetify.showNotification('Imported ' + imported_tag_count + ' tags!');
+    Spicetify.showNotification('Imported ' + imported_tag_count + ' playlist\'s tags!');
   });
 
   settings.addButton('button-export-tags', 'Export playlist tags to clipboard', 'Export', async () => {
