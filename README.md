@@ -7,7 +7,7 @@ Introduces an improved way of organizing and sharing playlists.
 ## Feature Showcase
 
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/eed6d3ca-af03-4728-be08-0031002c7355"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/0a6eba1b-6038-4661-b5b4-67c43cc07194"/></img>
 </p>
 <p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d1f0a204-6f3e-460e-8e5b-dc756d9c584e"/></img>
