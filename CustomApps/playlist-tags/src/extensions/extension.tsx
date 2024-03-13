@@ -33,7 +33,7 @@ function registerSettings() {
     Spicetify.showNotification('Metadata cache cleared');
   });
 
-  settings.addToggle('use-contents-cache', 'SEE README: Use tracklist cache', false);
+  settings.addToggle('use-contents-cache', 'Use tracklist cache', false);
 
   settings.addButton('button-clear-contents-cache', 'Remove tracklist cache', 'Clear', () => {
     clearContentsCache();
@@ -60,12 +60,12 @@ function registerSettings() {
     Spicetify.showNotification('Tags copied to clipboard!');
   });
 
-  settings.addButton('button-add-contains-local-files-tag-to-all-containing', 'Add "contains-local-files" tag to all playlists containing local files', 'Add', async () => {
+  settings.addButton('button-add-contains-local-files-tag-to-all-containing', 'Add "[contains-local-files]" tag to all playlists containing local files', 'Add', async () => {
     appendTagToAllPlaylistsContainingLocalFiles('[contains-local-files]');
     Spicetify.showNotification('Processing playlists');
   });
 
-  settings.addButton('button-add-creator-displayname-tag-to-all', 'Add creator tag to all playlists', 'Add', async () => {
+  settings.addButton('button-add-creator-displayname-tag-to-all', 'Add "[by:<username>]" tag to all playlists', 'Add', async () => {
     appendCreatorDisplayNameTagToAllPlaylists();
     Spicetify.showNotification('Processing playlists');
   });
