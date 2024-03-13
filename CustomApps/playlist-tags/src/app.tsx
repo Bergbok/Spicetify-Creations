@@ -171,7 +171,17 @@ const App = () => {
             </div>
             <div className='tag-list-wrapper'>
               {
-                tagList.map((tag) => {
+                tagList.sort((a, b) => {
+                  const a_in_filter = filterQuery.split(' ').includes(a);
+                  const b_in_filter = filterQuery.split(' ').includes(b);
+                  if (a_in_filter && !b_in_filter) {
+                    return -1;
+                  } else if (!a_in_filter && b_in_filter) {
+                    return 1;
+                  } else {
+                    return 0;
+                  }
+                }).map((tag) => {
                   const last_term: string = (filterQuery.split(' ').pop() as string) || '';
                   if (tag.includes(last_term)) {
                     return (
