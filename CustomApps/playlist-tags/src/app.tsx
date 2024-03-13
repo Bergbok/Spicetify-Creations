@@ -37,15 +37,19 @@ const App = () => {
       const tags = [getCurrentURI()];
       setFilterQuery(tags.map(tag => tag).join(' '));
       const playlist_uris = getPlaylistsTaggedAs(tags);
+      setIsLoading(true);
       getPlaylistMetadata(playlist_uris).then(data => {
         setPlaylistData(data);
+        setIsLoading(false);
       });
     }
     if (activeLink === "All Tagged Playlists") {
       const stored_value = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
       const playlist_uris = stored_value ? JSON.parse(stored_value) : [];
+      setIsLoading(true);
       getPlaylistMetadata(playlist_uris).then(data => {
         setPlaylistData(data);
+        setIsLoading(false);
       });
     }
   }, [activeLink]);
@@ -53,9 +57,7 @@ const App = () => {
   useEffect(() => {
     Spicetify.Platform.History.replace('/playlist-tags/' + filterQuery);
     const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '));
-
     setIsLoading(true);
-
     getPlaylistMetadata(playlist_uris).then(data => {
       setPlaylistData(data);
       setIsLoading(false);
