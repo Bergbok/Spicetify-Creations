@@ -7,7 +7,7 @@ Introduces an improved way of organizing and sharing playlists.
 ## Feature Showcase
 
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/0a846c52-2441-4b69-9b39-76e65654cd13"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/eed6d3ca-af03-4728-be08-0031002c7355"/></img>
 </p>
 <p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d1f0a204-6f3e-460e-8e5b-dc756d9c584e"/></img>
@@ -53,7 +53,7 @@ In the event that you get a notification saying "Maximum local storage qouta rea
 To see how much space is being used by tags use the "Copy local storage key sizes" option.
 
 The import/export tags option can be used to import tags from other users as well, you can get my tags here: 
-- https://gist.github.com/Bergbok/c7503bcb7ba2699ae10830b5aacbf333
+- https://gist.github.com/Bergbok/c7503bcb7ba2699ae10830b5aacbf333 (takes up ~1.7mb of local storage)
 
 ## Installation
 
