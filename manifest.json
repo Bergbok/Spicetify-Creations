@@ -5,16 +5,22 @@
         "preview": "preview.png",
         "readme": "README.md",
         "branch": "dist/history-in-sidebar",
+        "authors": [
+            { "name": "Bergbok", "url": "https://github.com/Bergbok"}
+        ],
         "tags": [
             "shortcut"
         ]
     },
     {
         "name": "Playlist Tags",
-        "description": "Allows you to tag playlists and filter playlists by tag.",
+        "description": "Allows you to tag and filter playlists by tag.",
         "preview": "preview.png",
         "readme": "README.md",
         "branch": "dist/playlist-tags",
+        "authors": [
+            { "name": "Bergbok", "url": "https://github.com/Bergbok"}
+        ],
         "tags": [
             "tags"
         ]
