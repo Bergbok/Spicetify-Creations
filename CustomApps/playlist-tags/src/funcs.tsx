@@ -75,7 +75,7 @@ function appendTag(playlist_uris: string[], tag?: string) {
     playlist_uris.forEach(playlist_uri => {
       const current_value = Spicetify.LocalStorage.get('tags:' + playlist_uri);
       const current_tags = current_value ? JSON.parse(current_value) : [];
-      const new_tags = value.split(' ').reduce((unique_tags, tag) => {
+      const new_tags = value.trim().split(' ').reduce((unique_tags, tag) => {
         if (!current_tags.includes(tag)) {
             unique_tags.push(tag);
         }
@@ -240,7 +240,6 @@ export async function getPlaylistMetadata(playlist_uris: string[]) {
         return metadata_cache;
       }
     }
-
     const playlist_metadata = await Spicetify.Platform.PlaylistAPI.getMetadata('spotify:playlist:' + uri);
     if (use_cache) {
       try {
@@ -260,16 +259,23 @@ export function getPlaylistTags(playlist_uri: string): string[] {
 };
   
 export function getPlaylistsTaggedAs(tags: string[]) {
-  const taggedPlaylistURIs = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
-  if (taggedPlaylistURIs) {
-    const playlistURIs = JSON.parse(taggedPlaylistURIs);
-    const filteredURIs = playlistURIs.filter((uri: string) => {
-      const playlistTags = getPlaylistTags(uri);
-      return tags.every((tag) => playlistTags.includes(tag));
+  const tagged_playlist_uris = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
+  if (tagged_playlist_uris) {
+    const playlistURIs = JSON.parse(tagged_playlist_uris);
+    
+    const includeTags = tags.filter(tag => !/^!.+/.test(tag));
+    const excludeTags = tags.filter(tag => /^!.+/.test(tag)).map(tag => tag.slice(1));
+
+    const filtered_uris = playlistURIs.filter((uri: string) => {
+      const playlist_tags = new Set(getPlaylistTags(uri)); 
+      return includeTags.every(tag => playlist_tags.has(tag)) &&
+             excludeTags.every(tag => !playlist_tags.has(tag));
     });
-    return filteredURIs;
+    
+    return filtered_uris;
+  } else {
+    return [];
   }
-  return [];
 };
 
 function getFolderPlaylistURIs(folder_data: any) {
