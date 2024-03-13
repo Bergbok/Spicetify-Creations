@@ -15,6 +15,7 @@ Introduces an improved way of organizing and sharing playlists.
 
 [Read more...](/CustomApps/playlist-tags/README.md)
 <hr>
+
 ### History in Sidebar
 
 <p align="left">
