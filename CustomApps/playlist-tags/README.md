@@ -1,10 +1,17 @@
 # Playlist Tags
 
-Introduces an improved way of organizing playlists.
+Introduces an improved way of organizing and sharing playlists.
 
 > If you like it, please consider starring it on GitHub 🌟
 
 ## Feature Showcase
+
+<p align="center">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/0a846c52-2441-4b69-9b39-76e65654cd13"/></img>
+</p>
+<p align="center">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d1f0a204-6f3e-460e-8e5b-dc756d9c584e"/></img>
+</p>
 
 ### Adding Tags
 
@@ -33,7 +40,9 @@ Right-clicking a tag on the "Search" or "All Tags" pages removes them from all p
 
 > Implemented using spcr-settings
 > 
-> NOTE: Currently the button class spcr-settings uses is outdated so your buttons are gonna be pretty ugly until it gets fixed
+> NOTE:
+> Currently the button class spcr-settings uses is outdated so your buttons are gonna be pretty ugly until it gets fixed <br>
+> I already opened a [pull request](https://github.com/FlafyDev/spicetify-creator-plugins/pull/10) that fixes the issue
 
 Enabling "Use metadata cache" and "Use tracklist cache" speeds up searches and playing a lot, however it also takes up space in Spotify's local storage which is limited to ~10MB. 
 <br>
@@ -43,7 +52,8 @@ In the event that you get a notification saying "Maximum local storage qouta rea
 <br>
 To see how much space is being used by tags use the "Copy local storage key sizes" option.
 
-The import/export tags option can be used to import tags from other users as well, you can get my tags here: https://pastebin.com/raw/HtXXxPJ0
+The import/export tags option can be used to import tags from other users as well, you can get my tags here: 
+- https://gist.github.com/Bergbok/c7503bcb7ba2699ae10830b5aacbf333
 
 ## Installation
 
@@ -58,11 +68,14 @@ The import/export tags option can be used to import tags from other users as wel
 
 ## Planned Updates
 
-- [ ] "Add artist name tag to playlists containing only one artist" option
-- [ ] "Add year tag to playlists containg year in description" option
-- [ ] Improved "All Tagged Playlists" page
-- [ ] Improved "All Tags" page
 - [ ] Renaming tags
+- [ ] Improved "All Tags" page
+- [ ] Improved tag suggestions
+- [ ] Improved "All Tagged Playlists" page
+- [ ] No assigned cover images first sorting option
+- [ ] "Add year tag to playlists containg year in description" option
+- [ ] "Add unplayable tag to playlists without playable tracks" option
+- [ ] "Add artist name tag to playlists containing only one artist" option
 
 If you have any feature requests/bug reports feel free to [open a issue](https://github.com/Bergbok/Spicetify-Creations/issues/new/choose)!
 
