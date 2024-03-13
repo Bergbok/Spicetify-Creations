@@ -12,12 +12,13 @@ Saves one full click!
 
 ## Installation
 
-1. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/history-in-sidebar.zip).
-2. Run `spicetify config-dir`
-3. Extract the zip into the CustomApps folder.
-4. Rename the extracted folder to `history-in-sidebar`
-5. Run `spicetify config custom_apps history-in-sidebar`
-6. Run `spicetify apply`
+1. Install Spicetify ([guide](https://spicetify.app/docs/advanced-usage/installation))
+2. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/history-in-sidebar.zip)
+3. Run `spicetify config-dir` in a terminal
+4. Extract the zip into the CustomApps folder
+5. Rename the extracted folder to `history-in-sidebar`
+6. Run `spicetify config custom_apps history-in-sidebar`
+7. Run `spicetify apply`
 
 > If you get stuck check out [Spicetify's official guide](https://spicetify.app/docs/advanced-usage/custom-apps/).
 
