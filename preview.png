@@ -53,7 +53,7 @@ In the event that you get a notification saying "Maximum local storage qouta rea
 To see how much space is being used by tags use the "Copy local storage key sizes" option.
 
 The import/export tags option can be used to import tags from other users as well, you can get my tags here: 
-- https://gist.github.com/Bergbok/c7503bcb7ba2699ae10830b5aacbf333
+- https://gist.github.com/Bergbok/c7503bcb7ba2699ae10830b5aacbf333 (takes up ~1.7mb of local storage)
 
 ## Installation
 
