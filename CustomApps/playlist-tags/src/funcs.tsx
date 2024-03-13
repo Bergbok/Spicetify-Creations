@@ -534,7 +534,7 @@ export function handlePageChange(location: Location) {
     }
 };
 
-export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_option: string, is_loading: boolean) {
+export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_option: string, is_loading: boolean, filter_query: string) {
   switch (sorting_option) {
     case 'Title: A-Z':
       playlist_data.sort((a, b) => a.name.localeCompare(b.name));
@@ -578,19 +578,20 @@ export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_optio
       `}
       </style>
       {is_loading ? (<h1 className='loading-text'>Loading...</h1>) : (
-        <div className='card-wrapper'>
-          {
-            playlist_data.map((playlist: PlaylistMetadata) => (
-              <SpotifyCard 
-                className = 'playlist-card'
-                type = "playlist" 
-                uri = {playlist.uri} 
-                header = {playlist.name}
-                subheader = {playlist.description}
-                imageUrl = {playlist.images[0]?.url}/>
-            ))
-          }
-        </div>
+        filter_query !== '' && playlist_data.length === 0 ? (<h1 className='loading-text'>No playlists found for query</h1>) :
+          <div className='card-wrapper'>
+            {
+              playlist_data.map((playlist: PlaylistMetadata) => (
+                <SpotifyCard 
+                  className = 'playlist-card'
+                  type = "playlist" 
+                  uri = {playlist.uri} 
+                  header = {playlist.name}
+                  subheader = {playlist.description}
+                  imageUrl = {playlist.images[0]?.url}/>
+              ))
+            }
+          </div>
       )}
     </React.Fragment>
   );

@@ -197,7 +197,7 @@ const App = () => {
             </div>
           </React.Fragment>
           {
-            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading)
+            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading, filterQuery)
           }
           {navBar}
         </>
@@ -247,7 +247,7 @@ const App = () => {
       return (
         <>
           {
-            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading)
+            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading, filterQuery)
           }
           {navBar}
         </>
