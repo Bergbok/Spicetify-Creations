@@ -225,7 +225,7 @@ export function getAllTags(sorting_option: string) {
 };
 
 export function getCurrentURI() {
-  return Spicetify.Platform.History.location.pathname.split('/')[2] ?? '';
+  return Spicetify.Platform.History.location.pathname.split('/').slice(2).join('/') ?? '';;
 };
 
 export async function getPlaylistMetadata(playlist_uris: string[]) {
