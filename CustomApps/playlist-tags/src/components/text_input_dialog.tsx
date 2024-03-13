@@ -1,6 +1,6 @@
 // Modified version of https://github.com/harbassan/spicetify-apps/blob/main/library/src/components/text_input_dialog.tsx
 
-import React, { FormEvent } from "react";
+import React, { FormEvent } from 'react';
 
 const TextInputDialog = (props: { def: string; placeholder: string; onSave: (value: string) => void }) => {
     const { def, placeholder, onSave } = props;
@@ -38,17 +38,18 @@ const TextInputDialog = (props: { def: string; placeholder: string; onSave: (val
             }
         `}
         </style>
-        <form className="text-input-form" onSubmit={onSubmit}>
-            <label className={"text-input-wrapper"}>
+        <form className='text-input-form' onSubmit={onSubmit}>
+            <label className={'text-input-wrapper'}>
                 <input
-                    className={"text-input"}
-                    type="text"
+                    className={'text-input'}
+                    type='text'
                     value={value}
                     placeholder={placeholder}
+                    spellCheck='false'
                     onChange={(e) => setValue(e.target.value)}/>
             </label>
-            <button type="submit" className="modal-button">
-                <span className="ButtonInner-sc-14ud5tc-0 ButtonInner-small encore-bright-accent-set">Save</span>
+            <button type='submit' className='modal-button'>
+                <span className='ButtonInner-sc-14ud5tc-0 ButtonInner-small encore-bright-accent-set'>Save</span>
             </button>
         </form>
     </>);
