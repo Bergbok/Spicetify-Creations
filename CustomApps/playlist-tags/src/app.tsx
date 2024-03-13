@@ -161,6 +161,7 @@ const App = () => {
                   className='tag-search-bar'
                   type="text"
                   placeholder='Enter tags'
+                  spellCheck='false'
                   value={filterQuery}
                   onFocus={toggleInputFocus}
                   onBlur={toggleInputFocus}
