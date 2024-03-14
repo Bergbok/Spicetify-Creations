@@ -73,6 +73,7 @@ The import/export tags option can be used to import tags from other users as wel
 - [ ] Improved "All Tags" page
 - [ ] Improved tag suggestions
 - [ ] Improved "All Tagged Playlists" page
+- [ ] Debouncing (performance improvement)
 - [ ] No assigned cover images first sorting option
 - [ ] "Add year tag to playlists containg year in description" option
 - [ ] "Add unplayable tag to playlists without playable tracks" option
