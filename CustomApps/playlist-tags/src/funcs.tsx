@@ -9,8 +9,11 @@ import TextInputDialog from "./components/text_input_dialog";
 //////////////////////////////////////// TAGGING FUNCTIONS /////////////////////////////////////////
 
 enum MassTagOperation {
+  AddArtistTag,
+  AddCreatorDisplayNameTag,
   AddLocalFilesTag,
-  AddCreatorDisplayNameTag
+  AddUnplayableTag,
+  AddYearTag
 }
 
 export async function appendTagsToFolderPlaylists(folder_uri: string) {
@@ -21,18 +24,42 @@ export async function appendTagsToFolderPlaylists(folder_uri: string) {
   }
 };
 
-export async function appendCreatorDisplayNameTagToAllPlaylists() {
+export async function appendArtistTagToPlaylistsContainingOneArtist() {
   const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
   for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], '', MassTagOperation.AddCreatorDisplayNameTag);
+    await processItem(rootlist.items[i], MassTagOperation.AddArtistTag);
   }
   Spicetify.showNotification('Finished processing playlists');
 };
 
-export async function appendTagToAllPlaylistsContainingLocalFiles(tag: string) {
+export async function appendCreatorDisplayNameTagToAllPlaylists() {
   const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
   for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], tag, MassTagOperation.AddLocalFilesTag);
+    await processItem(rootlist.items[i], MassTagOperation.AddCreatorDisplayNameTag);
+  }
+  Spicetify.showNotification('Finished processing playlists');
+};
+
+export async function appendTagToPlaylistsContainingLocalFiles(tag: string) {
+  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
+  for (let i = 0; i < rootlist.items.length; i++) {
+    await processItem(rootlist.items[i], MassTagOperation.AddLocalFilesTag, tag);
+  }
+  Spicetify.showNotification('Finished processing playlists');
+};
+
+export async function appendUnplayableTagToUnplayable() {
+  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
+  for (let i = 0; i < rootlist.items.length; i++) {
+    await processItem(rootlist.items[i], MassTagOperation.AddUnplayableTag);
+  }
+  Spicetify.showNotification('Finished processing playlists');
+};
+
+export async function appendYearTagToPlaylistsContaingYearInDescription() {
+  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
+  for (let i = 0; i < rootlist.items.length; i++) {
+    await processItem(rootlist.items[i], MassTagOperation.AddYearTag);
   }
   Spicetify.showNotification('Finished processing playlists');
 };
@@ -157,21 +184,31 @@ function deregisterPlaylistAsTagged(playlist_uri: string) {
   }
 };
 
-async function processItem(item: any, tag: string, operation: MassTagOperation) {
+async function processItem(item: any, operation: MassTagOperation, tag?: string) {
   if (item.type === 'folder') {
     for (let i = 0; i < item.items.length; i++) {
-      await processItem(item.items[i], tag, operation);
+      await processItem(item.items[i], operation, tag);
     }
   } else if (item.type === 'playlist') {
     const item_tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + item.uri.replace('spotify:playlist:','')) || '[]');
     switch (operation) {
-      case MassTagOperation.AddLocalFilesTag:
-        if (!item_tags.includes('[contains-local-files]')) {
+      case MassTagOperation.AddArtistTag:
+        if (!item_tags.some((tag: string) => tag.startsWith('[artist:'))) {
           const playlist_contents: PlaylistContents = await Spicetify.Platform.PlaylistAPI.getContents(item.uri);
-          const contains_local_files = playlist_contents.items.some(item => item.isLocal);
-          if (contains_local_files) {
-            appendTag([item.uri.replace('spotify:playlist:','')], tag);
-            console.log('Added "' + tag + '" tag to', item.uri);
+          
+          // Gets the artists of all items
+          const artists = playlist_contents.items.filter(item => item.artists && item.artists.length > 0).map(item => item.artists[0].name);
+          
+          // Creates a set from the artists array
+          const unique_artists = new Set(artists);
+          
+          // Checks if all items contain the same artist
+          const contains_only_one_artist = unique_artists.size === 1;
+          
+          if (contains_only_one_artist) {
+            const only_artist_name = artists[0].replace(/ /g, '-');
+            appendTag([item.uri.replace('spotify:playlist:','')], '[artist:' + only_artist_name + ']');
+            console.log('Added "[artist:' + only_artist_name + ']" tag to:', item.uri);
           }
           break;
         }
@@ -179,12 +216,42 @@ async function processItem(item: any, tag: string, operation: MassTagOperation) 
       case MassTagOperation.AddCreatorDisplayNameTag:
         if (!item_tags.some((tag: string) => tag.startsWith('[by:'))) {
           const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
-          // Multiple .replace() calls are used because one seemingly doesn't cut it for playlists owned by The Sounds of Spotify. 
-          // Try it yourself with: spotify:playlist:7vppw6zi3RPkuHAOleV5VU
-          const creator_display_name = playlist_metadata.owner.displayName.replace(' ', '-').replace(' ','-').replace(' ','-');
+          const creator_display_name = playlist_metadata.owner.displayName.replace(/ /g, '-');
           appendTag([item.uri.replace('spotify:playlist:','')], '[by:' + creator_display_name + ']');
-          console.log('Added "[by:' + creator_display_name + ']" tag to', item.uri);
+          console.log('Added "[by:' + creator_display_name + ']" tag to:', item.uri);
           break;
+        }
+        break;
+      case MassTagOperation.AddLocalFilesTag:
+        if (!item_tags.includes('[contains-local-files]')) {
+          const playlist_contents: PlaylistContents = await Spicetify.Platform.PlaylistAPI.getContents(item.uri);
+          const contains_local_files = playlist_contents.items.some(item => item.isLocal);
+          if (contains_local_files) {
+            appendTag([item.uri.replace('spotify:playlist:','')], tag);
+            console.log('Added "' + tag + '" tag to:', item.uri);
+          }
+          break;
+        }
+        break;
+      case MassTagOperation.AddUnplayableTag:
+        if (!item_tags.some((tag: string) => tag.includes('[unplayable]'))) {
+          const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
+          const can_play = playlist_metadata.canPlay;
+          if (!can_play) {
+            appendTag([item.uri.replace('spotify:playlist:','')], '[unplayable]');
+            console.log('Added "[unplayable]" tag to:', item.uri);
+            break;
+          }
+        }
+        break;
+      case MassTagOperation.AddYearTag:
+        if (!item_tags.some((tag: string) => tag.startsWith('[year:'))) {
+          const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
+          const year = playlist_metadata.description.substring(0, 4);
+          if (year.match(/^\d{4}/)) {
+            appendTag([item.uri.replace('spotify:playlist:','')], '[year:' + year + ']');
+            console.log('Added "[year:' + year + ']" tag to:', item.uri);
+          }
         }
         break;
     }

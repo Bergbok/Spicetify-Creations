@@ -1,4 +1,4 @@
-import { handlePageChange, getCurrentURI, getPlaylistTags, renderPlaylistPageElements, clearMetadataCache, clearAllTags, importTags, exportTags, appendTagsToFolderPlaylists, clearContentsCache, getLocalStorageKeySizes, appendTagToAllPlaylistsContainingLocalFiles, appendCreatorDisplayNameTagToAllPlaylists } from '../funcs';
+import { handlePageChange, getCurrentURI, getPlaylistTags, renderPlaylistPageElements, clearMetadataCache, clearAllTags, importTags, exportTags, appendTagsToFolderPlaylists, clearContentsCache, getLocalStorageKeySizes, appendTagToPlaylistsContainingLocalFiles, appendCreatorDisplayNameTagToAllPlaylists, appendArtistTagToPlaylistsContainingOneArtist, appendUnplayableTagToUnplayable, appendYearTagToPlaylistsContaingYearInDescription } from '../funcs';
 import { SettingsSection } from 'spcr-settings';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import { version as CURRENT_VERSION } from '../../package.json';
@@ -33,16 +33,11 @@ function registerSettings() {
     Spicetify.showNotification('Metadata cache cleared');
   });
 
-  settings.addToggle('use-contents-cache', 'Use tracklist cache', false);
+  settings.addToggle('use-contents-cache', 'Use tracklist cache', true);
 
   settings.addButton('button-clear-contents-cache', 'Remove tracklist cache', 'Clear', () => {
     clearContentsCache();
     Spicetify.showNotification('Tracklist cache cleared');
-  });
-
-  settings.addButton('button-remove-all-tags', 'CAUTION: Remove ALL tags', 'Clear', () => {
-    clearAllTags();
-    Spicetify.showNotification('All tags removed');
   });
 
   settings.addButton('button-import-tags', 'Import tags from clipboard', 'Import', async () => {
@@ -55,24 +50,44 @@ function registerSettings() {
     Spicetify.showNotification('Tags copied to clipboard!');
   });
 
-  settings.addButton('button-export-tags-excluding-lcontains-local-files', 'Export playlist tags (excluding those tagged as [contains-local-files])', 'Export', async () => {
+  settings.addButton('button-export-tags-excluding-contains-local-files', 'Export playlist tags (excluding those tagged as [contains-local-files])', 'Export', async () => {
     await Spicetify.Platform.ClipboardAPI.copy(exportTags(true));
     Spicetify.showNotification('Tags copied to clipboard!');
   });
 
-  settings.addButton('button-add-contains-local-files-tag-to-all-containing', 'Add "[contains-local-files]" tag to all playlists containing local files', 'Add', async () => {
-    appendTagToAllPlaylistsContainingLocalFiles('[contains-local-files]');
+  settings.addButton('button-add-artist-tags', 'Add "[artist:<artist>]" tag to playlists containing one artist', 'Add', async () => {
+    appendArtistTagToPlaylistsContainingOneArtist();
     Spicetify.showNotification('Processing playlists');
   });
 
-  settings.addButton('button-add-creator-displayname-tag-to-all', 'Add "[by:<username>]" tag to all playlists', 'Add', async () => {
+  settings.addButton('button-add-creator-displayname-tags', 'Add "[by:<username>]" tag to all playlists', 'Add', async () => {
     appendCreatorDisplayNameTagToAllPlaylists();
+    Spicetify.showNotification('Processing playlists');
+  });
+
+  settings.addButton('button-add-contains-local-files-tags', 'Add "[contains-local-files]" tag to playlists containing local files', 'Add', async () => {
+    appendTagToPlaylistsContainingLocalFiles('[contains-local-files]');
+    Spicetify.showNotification('Processing playlists');
+  });
+
+  settings.addButton('button-add-unplayable-tags', 'Add "[unplayable]" tag to unplayable playlists', 'Add', async () => {
+    appendUnplayableTagToUnplayable();
+    Spicetify.showNotification('Processing playlists');
+  });
+
+  settings.addButton('button-add-year-tags', 'Add "[year:<year>]" tag to playlists containing year in description', 'Add', async () => {
+    appendYearTagToPlaylistsContaingYearInDescription();
     Spicetify.showNotification('Processing playlists');
   });
 
   settings.addButton('button-get-localstorage-key-sizes', 'Copy local storage key sizes', 'Copy', async () => {
     await Spicetify.Platform.ClipboardAPI.copy(getLocalStorageKeySizes()); 
     Spicetify.showNotification('Copied to clipboard!');
+  });
+
+  settings.addButton('button-remove-all-tags', 'CAUTION: Remove ALL tags', 'Clear', () => {
+    clearAllTags();
+    Spicetify.showNotification('All tags removed');
   });
 
   settings.pushSettings();
