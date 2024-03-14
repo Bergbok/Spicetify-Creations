@@ -23,14 +23,15 @@ const App = () => {
   
   // @ts-ignore
   const SpotifyChip: any = Spicetify.ReactComponent.Chip;
-  const [navBar, activeLink, setActiveLink] = useNavigationBar(navbar_items);
-  const [playlistData, setPlaylistData] = useState<Array<PlaylistMetadata>>([]);
-  const [filterQuery, setFilterQuery] = useState('');
-  const [shuffleState, setIsEnabled] = useState(false);
-  const [inputFocused, setIsFocused] = useState(false);
-  const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
   const [tagList, setTags] = useState(getAllTags('A-Z'));
+  const [shuffleState, setIsEnabled] = useState(false);
+  const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
+  const [playlistData, setPlaylistData] = useState<Array<PlaylistMetadata>>([]);
+  const [navBar, activeLink, setActiveLink] = useNavigationBar(navbar_items);
   const [isLoading, setIsLoading] = useState(false);
+  const [inputFocused, setIsFocused] = useState(false);
+  const [filterQuery, setFilterQuery] = useState('');
+  const [timeoutID, setTimeoutID] = useState<number | null>(null);
 
   useEffect(() => {
     if (activeLink === "Search") {
@@ -55,15 +56,24 @@ const App = () => {
   }, [activeLink]);
 
   useEffect(() => {
-    Spicetify.Platform.History.replace('/playlist-tags/' + filterQuery);
-    const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '));
     setIsLoading(true);
-    getPlaylistMetadata(playlist_uris).then(data => {
-      setPlaylistData(data);
-      setIsLoading(false);
-    });
-  }, [filterQuery]);
 
+    if (timeoutID) {
+      clearTimeout(timeoutID);
+    }
+
+    const newTimeoutID = window.setTimeout(() => {
+      Spicetify.Platform.History.replace('/playlist-tags/' + filterQuery);
+      const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '));
+      getPlaylistMetadata(playlist_uris).then(data => {
+        setPlaylistData(data);
+        setIsLoading(false);
+      });
+    }, 420); 
+  
+    setTimeoutID(newTimeoutID);
+  }, [filterQuery]);
+  
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterQuery(event.target.value);
   };

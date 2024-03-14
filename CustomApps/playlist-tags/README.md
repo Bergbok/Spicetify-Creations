@@ -73,11 +73,11 @@ The import/export tags option can be used to import tags from other users as wel
 - [ ] Improved "All Tags" page
 - [ ] Improved tag suggestions
 - [ ] Improved "All Tagged Playlists" page
-- [ ] Debouncing (performance improvement)
 - [ ] No assigned cover images first sorting option
 - [ ] "Add year tag to playlists containg year in description" option
 - [ ] "Add unplayable tag to playlists without playable tracks" option
 - [ ] "Add artist name tag to playlists containing only one artist" option
+- [x] Debouncing (performance improvement)
 
 If you have any feature requests/bug reports feel free to [open a issue](https://github.com/Bergbok/Spicetify-Creations/issues/new/choose)!
 
