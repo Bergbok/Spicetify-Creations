@@ -35,7 +35,7 @@ Right-clicking a tag on the "Search" or "All Tags" pages removes them from all p
 ### Settings
 
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/5a3e0091-4792-47e4-acdb-1317fb0e5b64"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/6ed9f649-4fa0-4bec-a1db-b37f7d29ee2a"/></img>
 </p>
 
 > Implemented using spcr-settings
@@ -73,11 +73,11 @@ The import/export tags option can be used to import tags from other users as wel
 - [ ] Improved "All Tags" page
 - [ ] Improved tag suggestions
 - [ ] Improved "All Tagged Playlists" page
-- [ ] Debouncing (performance improvement)
 - [ ] No assigned cover images first sorting option
-- [ ] "Add year tag to playlists containg year in description" option
-- [ ] "Add unplayable tag to playlists without playable tracks" option
-- [ ] "Add artist name tag to playlists containing only one artist" option
+- [x] "Add artist name tag to playlists containing only one artist" option
+- [x] "Add unplayable tag to playlists without playable tracks" option
+- [x] "Add year tag to playlists containg year in description" option
+- [x] Debouncing (performance improvement)
 
 If you have any feature requests/bug reports feel free to [open a issue](https://github.com/Bergbok/Spicetify-Creations/issues/new/choose)!
 
