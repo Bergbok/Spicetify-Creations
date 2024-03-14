@@ -512,6 +512,7 @@ export async function addPlaylistsToQueue(playlists: PlaylistMetadata[], shuffle
   Spicetify.showNotification('Added ' + track_list.length + ' tracks to queue');
   if (track_list.length !== 0) {
     Spicetify.Player.next();
+    Spicetify.Player.play();
   }
 };
 
