@@ -194,8 +194,9 @@ const App = () => {
             <div className='tag-list-wrapper'>
               {
                 tagList.sort((a, b) => {
-                  const a_in_filter = filterQuery.split(' ').includes(a);
-                  const b_in_filter = filterQuery.split(' ').includes(b);
+                  const stripped_filter_query = filterQuery.replace(/!/g, '');
+                  const a_in_filter = stripped_filter_query.split(' ').includes(a);
+                  const b_in_filter = stripped_filter_query.split(' ').includes(b);
                   if (a_in_filter && !b_in_filter) {
                     return -1;
                   } else if (!a_in_filter && b_in_filter) {
@@ -204,24 +205,38 @@ const App = () => {
                     return 0;
                   }
                 }).map((tag) => {
-                  const last_term: string = (filterQuery.split(' ').pop() as string) || '';
+                  const last_term: string = ((filterQuery.split(' ').pop() as string) || '').replace(/!/g, '');
                   if (tag.toLowerCase().includes(last_term.toLowerCase())) {
                     return (
                       <SpotifyChip
                         // selectedColorSet={filterQuery.split(' ').includes(tag) ? 'positive' : 'negative'}
                         className='tag-list-tag'
                         style={{ 
-                          backgroundColor: filterQuery.split(' ').includes(tag) ? 'var(--spice-selected-row)' : '', 
+                          backgroundColor: filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'var(--spice-selected-row)' : '', 
                         }}
                         onClick={() => {
-                          if (filterQuery.split(' ').includes(tag)) {
-                            setFilterQuery(filterQuery.split(' ').filter(word => word !== tag).join(' '));
-                          } else {
-                            setFilterQuery(filterQuery.split(' ').slice(0, -1).join(' ') + ' ' + tag + ' ');
+                          const last_term: string = (filterQuery.split(' ').pop() as string) || '';
+                          const isExcluded = last_term.startsWith('!');
+                          const tagWithExclusion = isExcluded ? '!' + tag : tag;
+                          const excludedTag = '!' + tag;
+                        
+                          switch (true) {
+                            // Removes exlusion tag from search
+                            case filterQuery.split(' ').includes(excludedTag):
+                              setFilterQuery(filterQuery.split(' ').filter(word => word !== excludedTag).join(' '));
+                              break;
+                            // Removes inclusion tag from search
+                            case filterQuery.split(' ').includes(tag):
+                              setFilterQuery(filterQuery.split(' ').filter(word => word !== tag).join(' '));
+                              break;
+                            // Adds tag to search
+                            default:
+                              setFilterQuery(filterQuery.split(' ').slice(0, -1).join(' ') + ' ' + tagWithExclusion + ' ');
+                              break;
                           }
                         }}
                         onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>{/* {tag} */}
-                        <p dangerouslySetInnerHTML={{ __html: `<span style="color: ${filterQuery.split(' ').includes(tag) ? 'black' : 'var(--spice-text)'}">${tag}</span>` }}></p>
+                        <p dangerouslySetInnerHTML={{ __html: `<span style="color: ${filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'black' : 'var(--spice-text)'}">${tag}</span>` }}></p>
                       </SpotifyChip>
                     );
                   }
