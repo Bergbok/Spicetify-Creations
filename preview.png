@@ -9,6 +9,15 @@ Introduces an improved way of organizing and sharing playlists.
 <p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/0a6eba1b-6038-4661-b5b4-67c43cc07194"/></img>
 </p>
+
+> Tags can be excluded using the ! character
+
+<p align="center">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/7764d6c8-868b-43f7-aa87-e7415fe1bfbb"/></img>
+</p>
+
+> V1.4: Now supports AND/OR filter options
+
 <p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d1f0a204-6f3e-460e-8e5b-dc756d9c584e"/></img>
 </p>
@@ -78,6 +87,8 @@ The import/export tags option can be used to import tags from other users as wel
 - [x] "Add unplayable tag to playlists without playable tracks" option
 - [x] "Add year tag to playlists containg year in description" option
 - [x] Debouncing (performance improvement)
+- [x] Case insensitive searching
+- [x] AND/OR filter options
 
 If you have any feature requests/bug reports feel free to [open a issue](https://github.com/Bergbok/Spicetify-Creations/issues/new/choose)!
 
