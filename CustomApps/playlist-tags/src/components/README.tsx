@@ -36,7 +36,7 @@ const README = ({ raw_url, GitHub_button_url: GitHub_button_url }: READMEProps) 
           }
           .GitHub-button-wrapper {
             position: absolute;
-            right: 10px;
+            right: 20px;
           }
         `}
       </style>
