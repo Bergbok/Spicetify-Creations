@@ -6,9 +6,19 @@
 
 Introduces an improved way of organizing and sharing playlists.
 
+
 <p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/0a6eba1b-6038-4661-b5b4-67c43cc07194"/></img>
 </p>
+
+> Tags can be excluded using the ! character
+
+<p align="center">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/2d368f0e-e48f-49b0-8d60-2401f3a7baf9"/></img>
+</p>
+
+> V1.4: Now supports AND/OR filter options
+
 <p align="center">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d1f0a204-6f3e-460e-8e5b-dc756d9c584e"/></img>
 </p>
