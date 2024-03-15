@@ -325,20 +325,23 @@ export function getPlaylistTags(playlist_uri: string): string[] {
   return tags ? JSON.parse(tags) : [];
 };
   
-export function getPlaylistsTaggedAs(tags: string[]) {
+export function getPlaylistsTaggedAs(tags: string[], filter_option: string) {
   const tagged_playlist_uris = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
   if (tagged_playlist_uris) {
     const playlistURIs = JSON.parse(tagged_playlist_uris);
     
-    const includeTags = tags.filter(tag => !/^!.+/.test(tag));
-    const excludeTags = tags.filter(tag => /^!.+/.test(tag)).map(tag => tag.slice(1));
+    const include_tags = tags.filter(tag => !/^!.+/.test(tag)).map(tag => tag.toLowerCase());
+    const exclude_tags = tags.filter(tag => /^!.+/.test(tag)).map(tag => tag.slice(1).toLowerCase());
 
     const filtered_uris = playlistURIs.filter((uri: string) => {
-      const playlist_tags = new Set(getPlaylistTags(uri)); 
-      return includeTags.every(tag => playlist_tags.has(tag)) &&
-             excludeTags.every(tag => !playlist_tags.has(tag));
+      const playlist_tags = new Set(getPlaylistTags(uri).map(tag => tag.toLowerCase())); 
+      
+      const include_check: boolean = filter_option === 'Match Any Tag (OR)' 
+        ? include_tags.some(tag => playlist_tags.has(tag))
+        : include_tags.every(tag => playlist_tags.has(tag));
+
+      return include_check && exclude_tags.every(tag => !playlist_tags.has(tag));
     });
-    
     return filtered_uris;
   } else {
     return [];

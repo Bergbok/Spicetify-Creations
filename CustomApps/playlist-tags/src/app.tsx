@@ -1,6 +1,7 @@
 import { PlaylistMetadata } from './types/playlist_metadata.d'
 import { renderPlaylists, getPlaylistMetadata, getCurrentURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists } from './funcs';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
+import FilterDropdown from './components/filter_dropdown';
 import PlayButton from './components/play_button';
 import React, { useEffect, useState } from 'react';
 import README from './components/README';
@@ -26,6 +27,7 @@ const App = () => {
   const [tagList, setTags] = useState(getAllTags('A-Z'));
   const [shuffleState, setIsEnabled] = useState(false);
   const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
+  const [selectedFilterOption, setFilterOption] = useState('Match Any Tag (OR)');
   const [playlistData, setPlaylistData] = useState<Array<PlaylistMetadata>>([]);
   const [navBar, activeLink, setActiveLink] = useNavigationBar(navbar_items);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +39,7 @@ const App = () => {
     if (activeLink === "Search") {
       const tags = [getCurrentURI()];
       setFilterQuery(tags.map(tag => tag).join(' '));
-      const playlist_uris = getPlaylistsTaggedAs(tags);
+      const playlist_uris = getPlaylistsTaggedAs(tags, selectedFilterOption);
       setIsLoading(true);
       getPlaylistMetadata(playlist_uris).then(data => {
         setPlaylistData(data);
@@ -57,6 +59,15 @@ const App = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '), selectedFilterOption);
+    getPlaylistMetadata(playlist_uris).then(data => {
+      setPlaylistData(data);
+      setIsLoading(false);
+    });
+  }, [selectedFilterOption]);
+
+  useEffect(() => {
+    setIsLoading(true);
 
     if (timeoutID) {
       clearTimeout(timeoutID);
@@ -64,7 +75,7 @@ const App = () => {
 
     const newTimeoutID = window.setTimeout(() => {
       Spicetify.Platform.History.replace('/playlist-tags/' + filterQuery);
-      const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '));
+      const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '), selectedFilterOption);
       getPlaylistMetadata(playlist_uris).then(data => {
         setPlaylistData(data);
         setIsLoading(false);
@@ -177,6 +188,7 @@ const App = () => {
                   onBlur={toggleInputFocus}
                   onChange={handleSearchChange}/>
               </div>
+              <FilterDropdown items={['Match Any Tag (OR)', 'Match All Tags (AND)']} onSelect={(value: string) => { setFilterOption(value) }}></FilterDropdown>
               <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A']} onSelect={(value: string) => { setSortingOption(value) }} />
             </div>
             <div className='tag-list-wrapper'>
@@ -193,7 +205,7 @@ const App = () => {
                   }
                 }).map((tag) => {
                   const last_term: string = (filterQuery.split(' ').pop() as string) || '';
-                  if (tag.includes(last_term)) {
+                  if (tag.toLowerCase().includes(last_term.toLowerCase())) {
                     return (
                       <SpotifyChip
                         // selectedColorSet={filterQuery.split(' ').includes(tag) ? 'positive' : 'negative'}

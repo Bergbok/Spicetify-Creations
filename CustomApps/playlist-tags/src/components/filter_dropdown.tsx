@@ -1,24 +1,23 @@
 import React from 'react';
 
-interface SortDropdownProps {
+interface FilterDropdownProps {
     items: string[];
     onSelect: (value: string) => void;
 };
 
-const SortDropdown = ({ items, onSelect }: SortDropdownProps) => {
+const FilterDropdown = ({ items, onSelect }: FilterDropdownProps) => {
     return (
         <React.Fragment>
             <style>
               {`
-                .sort-dropdown-wrapper {
+                .filter-dropdown-wrapper {
                     padding-left: 10px; 
-                    padding-right: 25px; 
                     width: max-content;
                     min-width: 222px;
                 }
               `}
             </style>
-            <div className = 'sort-dropdown-wrapper'>
+            <div className='filter-dropdown-wrapper'>
                 <Spicetify.ReactComponent.Dropdown
                     onSelect={onSelect}
                 >
@@ -33,4 +32,4 @@ const SortDropdown = ({ items, onSelect }: SortDropdownProps) => {
     );
 };
 
-export default SortDropdown;
+export default FilterDropdown;
