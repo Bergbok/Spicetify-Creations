@@ -13,7 +13,7 @@ Introduces an improved way of organizing and sharing playlists.
 > Tags can be excluded using the ! character
 
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/7764d6c8-868b-43f7-aa87-e7415fe1bfbb"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/2d368f0e-e48f-49b0-8d60-2401f3a7baf9"/></img>
 </p>
 
 > V1.4: Now supports AND/OR filter options
