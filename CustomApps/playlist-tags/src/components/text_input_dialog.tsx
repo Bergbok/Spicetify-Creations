@@ -2,8 +2,28 @@
 
 import React, { FormEvent } from 'react';
 
-const TextInputDialog = (props: { def: string; placeholder: string; onSave: (value: string) => void }) => {
-    const { def, placeholder, onSave } = props;
+/**
+ * Props for the TextInputDialog component.
+ * 
+ * @typedef {Object} TextInputDialogProps
+ * @property {string} def - The default value of the text input.
+ * @property {string} placeholder - The placeholder text for the text input.
+ * @property {(value: string) => void} onSave - Callback function that is called when the form is submitted.
+ */
+interface TextInputDialogProps {
+    def: string;
+    placeholder: string;
+    onSave: (value: string) => void;
+};
+
+/**
+ * A dialog component that contains a text input and a save button.
+ * When the form is submitted, the onSave callback is called with the current value of the text input.
+ * 
+ * @param {TextInputDialogProps} props - The props for the component.
+ * @returns {JSX.Element} The TextInputDialog component.
+ */
+const TextInputDialog = ({ def, placeholder, onSave }: TextInputDialogProps): JSX.Element => {
     const [value, setValue] = React.useState(def);
 
     const onSubmit = (e: FormEvent) => {

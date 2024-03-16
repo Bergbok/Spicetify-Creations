@@ -1,4 +1,4 @@
-import { handlePageChange, getCurrentURI, getPlaylistTags, renderPlaylistPageElements, clearMetadataCache, clearAllTags, importTags, exportTags, appendTagsToFolderPlaylists, clearContentsCache, getLocalStorageKeySizes, appendTagToPlaylistsContainingLocalFiles, appendCreatorDisplayNameTagToAllPlaylists, appendArtistTagToPlaylistsContainingOneArtist, appendUnplayableTagToUnplayable, appendYearTagToPlaylistsContaingYearInDescription } from '../funcs';
+import { handlePageChange, getCurrentPageURI, getPlaylistTags, renderPlaylistPageElements, clearMetadataCache, clearAllTags, importTags, exportTags, appendTagsToFolderPlaylists, clearContentsCache, getLocalStorageKeySizes, appendTagToPlaylistsContainingLocalFiles, appendCreatorDisplayNameTagToAllPlaylists, appendArtistTagToPlaylistsContainingOneArtist, appendUnplayableTagToUnplayable, appendYearTagToPlaylistsContaingYearInDescription } from '../funcs';
 import { SettingsSection } from 'spcr-settings';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import { version as CURRENT_VERSION } from '../../package.json';
@@ -125,7 +125,7 @@ function registerFolderContextMenuItem() {
   registerFolderContextMenuItem();
 
   if (Spicetify.Platform.History.location.pathname.startsWith('/playlist/')) {
-    renderPlaylistPageElements(getPlaylistTags(getCurrentURI()));
+    renderPlaylistPageElements(getPlaylistTags(getCurrentPageURI()));
   }
 
   Spicetify.Platform.History.listen((location: Location) => {

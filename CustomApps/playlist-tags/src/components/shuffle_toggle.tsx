@@ -1,10 +1,23 @@
 import React from 'react';
 
+/**
+ * Props for the ShuffleButton component.
+ * 
+ * @typedef {Object} ShuffleButtonProps
+ * @property {boolean} shuffleState - The shuffle state.
+ * @property {() => void} toggleShuffle - Callback function that toggles the shuffle state.
+ */
 interface ShuffleButtonProps {
     shuffleState: boolean;
     toggleShuffle: () => void;
 };
 
+/**
+ * A button component that displays the current shuffle state and toggles the state when clicked.
+ * 
+ * @param {ShuffleButtonProps} props - The props for the component.
+ * @returns {JSX.Element} The ShuffleButton component.
+ */
 const ShuffleButton = ({ shuffleState, toggleShuffle }: ShuffleButtonProps) => {
     // const tippyContent = shuffleState 
     //     ? "Disable Shuffle for Playlist Selection" 

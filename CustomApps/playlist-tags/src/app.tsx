@@ -1,5 +1,5 @@
 import { PlaylistMetadata } from './types/playlist_metadata.d'
-import { renderPlaylists, getPlaylistMetadata, getCurrentURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists } from './funcs';
+import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists } from './funcs';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import FilterDropdown from './components/filter_dropdown';
 import PlayButton from './components/play_button';
@@ -9,7 +9,12 @@ import ShuffleButton from './components/shuffle_toggle';
 import SortDropdown from './components/sort_dropdown';
 import useNavigationBar from 'spcr-navigation-bar';
 
+/**
+ * Represents the app page.
+ * This is a React functional component.
+ */
 const App = () => {
+  // Handles which items to display in the navigation bar based on user settings
   const default_navbar_items = ["Search", "All Tags", "All Tagged Playlists", "README"];
   let navbar_items = default_navbar_items;
   if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.navbar-all-tags-page') || 'false').value) {
@@ -22,8 +27,10 @@ const App = () => {
     navbar_items = navbar_items.filter(item => item !== "README");
   }
   
-  // @ts-ignore
+  // @ts-ignore (needed because the Chip component not present in spicetify.d.ts).
   const SpotifyChip: any = Spicetify.ReactComponent.Chip;
+
+  // React State Hooks 
   const [tagList, setTags] = useState(getAllTags('A-Z'));
   const [shuffleState, setIsEnabled] = useState(false);
   const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
@@ -35,9 +42,10 @@ const App = () => {
   const [filterQuery, setFilterQuery] = useState('');
   const [timeoutID, setTimeoutID] = useState<number | null>(null);
 
+  // Updates playlist data when the active navigation bar tab changes.
   useEffect(() => {
     if (activeLink === "Search") {
-      const tags = [getCurrentURI()];
+      const tags = [getCurrentPageURI()];
       setFilterQuery(tags.map(tag => tag).join(' '));
       const playlist_uris = getPlaylistsTaggedAs(tags, selectedFilterOption);
       setIsLoading(true);
@@ -57,6 +65,7 @@ const App = () => {
     }
   }, [activeLink]);
 
+  // Updates playlist data when the selected filter option changes.
   useEffect(() => {
     setIsLoading(true);
     const playlist_uris = getPlaylistsTaggedAs(filterQuery.trim().split(' '), selectedFilterOption);
@@ -66,6 +75,7 @@ const App = () => {
     });
   }, [selectedFilterOption]);
 
+  // Updates playlist data when the filter query changes (debounced).
   useEffect(() => {
     setIsLoading(true);
 
@@ -85,22 +95,27 @@ const App = () => {
     setTimeoutID(newTimeoutID);
   }, [filterQuery]);
   
+  // Updates the filter query when the user types.
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterQuery(event.target.value);
   };
 
+  // Toggles the shuffle state.
   const toggleShuffle = () => {
     setIsEnabled(!shuffleState);
   };
 
+  // Toggles the input focus state.
   const toggleInputFocus = () => {
     setIsFocused(!inputFocused);
   };
 
+  // Updates the tag list when a tag is removed from all playlists.
   const updateTagList = () => {
     setTags(getAllTags('A-Z'));
   };
 
+  // Renders different pages based on the active navigation bar tab.
   switch (activeLink) {
     case "Search":
       return (
@@ -193,6 +208,7 @@ const App = () => {
             </div>
             <div className='tag-list-wrapper'>
               {
+                // Places tags contained in the filter query at the beginning of the list
                 tagList.sort((a, b) => {
                   const stripped_filter_query = filterQuery.replace(/!/g, '');
                   const a_in_filter = stripped_filter_query.split(' ').includes(a);
@@ -215,23 +231,24 @@ const App = () => {
                           backgroundColor: filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'var(--spice-selected-row)' : '', 
                         }}
                         onClick={() => {
-                          const last_term: string = (filterQuery.split(' ').pop() as string) || '';
-                          const isExcluded = last_term.startsWith('!');
-                          const tagWithExclusion = isExcluded ? '!' + tag : tag;
-                          const excludedTag = '!' + tag;
-                        
+                          const filter_query_terms = filterQuery.split(' ');
+                          const last_term: string = (filter_query_terms.pop() as string) || '';
+                          const is_excluded = (last_term.startsWith('!'));
+                          const tag_with_exclusion = is_excluded ? '!' + tag : tag;
+                          const excluded_tag = '!' + tag;
+                          
                           switch (true) {
-                            // Removes exlusion tag from search
-                            case filterQuery.split(' ').includes(excludedTag):
-                              setFilterQuery(filterQuery.split(' ').filter(word => word !== excludedTag).join(' '));
+                            // Removes exclusion tag from search
+                            case filter_query_terms.includes(excluded_tag):
+                              setFilterQuery(filter_query_terms.filter(word => word !== excluded_tag).join(' '));
                               break;
                             // Removes inclusion tag from search
-                            case filterQuery.split(' ').includes(tag):
-                              setFilterQuery(filterQuery.split(' ').filter(word => word !== tag).join(' '));
+                            case filter_query_terms.includes(tag):
+                              setFilterQuery(filter_query_terms.filter(word => word !== tag).join(' '));
                               break;
                             // Adds tag to search
                             default:
-                              setFilterQuery(filterQuery.split(' ').slice(0, -1).join(' ') + ' ' + tagWithExclusion + ' ');
+                              setFilterQuery(filter_query_terms.slice(0, -1).join(' ') + ' ' + tag_with_exclusion + ' ');
                               break;
                           }
                         }}
@@ -251,8 +268,6 @@ const App = () => {
         </>
       );
     case "All Tags":
-      // @ts-ignore
-      const Chip: any = Spicetify.ReactComponent.Chip;
       return (
         <>
           {
@@ -270,19 +285,19 @@ const App = () => {
               <div className='tag-list-wrapper'>
                 {
                   tagList.map((tag) => (
-                    <Chip
+                    <SpotifyChip
                       className='tag-list-tag'
                       semanticColor='textBase'
                       onClick={() => {
-                        if (getCurrentURI() !== '') {
-                          Spicetify.Platform.History.push('/playlist-tags/' + getCurrentURI() + ' ' + tag);
+                        if (getCurrentPageURI() !== '') {
+                          Spicetify.Platform.History.push('/playlist-tags/' + getCurrentPageURI() + ' ' + tag);
                         } else {
                           Spicetify.Platform.History.push('/playlist-tags/' + tag);
                         }
                         setActiveLink('Search');
                       }}
                       onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>{tag}
-                    </Chip>
+                    </SpotifyChip>
                   ))
                 }
               </div>
@@ -317,10 +332,17 @@ const App = () => {
   }
 };
 
+
+/**
+ * Higher-order component that handles the initialization of Spicetify.
+ * @param WrappedComponent - The component to be wrapped.
+ * @returns A new component that handles the Spicetify initialization.
+ */
 const withSpicetifyInitialization = (WrappedComponent: React.FC) => {
   return () => {
     const [isReady, setIsReady] = useState(false);
 
+    // Initializes Spicetify and waits for required dependencies to be ready.
     useEffect(() => {
       const initializeSpicetify = async () => {
         await waitForSpicetify();
@@ -330,6 +352,7 @@ const withSpicetifyInitialization = (WrappedComponent: React.FC) => {
       initializeSpicetify();
     }, []);
 
+    // Renders a loading message when Spicetify is not ready.
     if (!isReady) {
       return (
         <h1 style={{ textAlign: 'center' }}>
@@ -338,6 +361,7 @@ const withSpicetifyInitialization = (WrappedComponent: React.FC) => {
       );
     }
 
+    // Renders the wrapped component when Spicetify is ready.
     return <WrappedComponent/>;
   };
 };

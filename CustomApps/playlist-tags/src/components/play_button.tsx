@@ -1,9 +1,21 @@
 import React from 'react';
 
+/**
+ * Props for the PlayButton component.
+ * 
+ * @typedef {Object} PlayButtonProps
+ * @property {() => void} onClick - Callback function that is called when the button is clicked.
+ */
 interface PlayButtonProps {
     onClick: () => void;
 };
 
+/**
+ * A button component that displays a play icon and calls a callback function when clicked.
+ * 
+ * @param {PlayButtonProps} props - The props for the component.
+ * @returns {JSX.Element} The PlayButton component.
+ */
 const PlayButton = ({ onClick }: PlayButtonProps) => {
     return (
         <React.Fragment>

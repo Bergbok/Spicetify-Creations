@@ -1,10 +1,24 @@
 import React from 'react';
 
+/**
+ * Props for the SortDropdown component.
+ * 
+ * @typedef {Object} SortDropdownProps
+ * @property {string[]} items - The items to be displayed in the dropdown.
+ * @property {(value: string) => void} onSelect - Callback function that is called when an item is selected.
+ */
 interface SortDropdownProps {
     items: string[];
     onSelect: (value: string) => void;
 };
 
+/**
+ * A dropdown component that displays a list of items and calls a callback function when an item is selected.
+ * This component is specifically used for sorting operations.
+ * 
+ * @param {SortDropdownProps} props - The props for the component.
+ * @returns {JSX.Element} The SortDropdown component.
+ */
 const SortDropdown = ({ items, onSelect }: SortDropdownProps) => {
     return (
         <React.Fragment>
