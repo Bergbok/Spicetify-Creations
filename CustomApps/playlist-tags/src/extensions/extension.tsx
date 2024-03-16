@@ -113,18 +113,14 @@ function registerFolderContextMenuItem() {
       return;
   }
 
-  const folderMenuItem = new Spicetify.ContextMenu.Item(
+  const folder_menu_item = new Spicetify.ContextMenu.Item(
       "Add Tags",
-      (uris, uids, contextUri) => { 
-        appendTagsToFolderPlaylists(uris[0]);
-      },
-      (uris, uids, contextUri) => {
-        return uris.some(uri => uri.includes(":folder:"));
-      },
+      uris => appendTagsToFolderPlaylists(uris[0]),
+      uris => Spicetify.URI.isFolder(uris[0]),
       'plus-alt'
   );
 
-  folderMenuItem.register();
+  folder_menu_item.register();
 };
 
 /**
