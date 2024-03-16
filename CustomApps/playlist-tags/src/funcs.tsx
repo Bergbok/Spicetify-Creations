@@ -497,7 +497,7 @@ function trimMetadata(playlist_metadata: PlaylistMetadata) {
   return {
     uri: playlist_metadata.uri.replace('spotify:playlist:', ''),
     name: playlist_metadata.name,
-    description: playlist_metadata.description,
+    description: playlist_metadata.description.substring(0, 32),
     images: [playlist_metadata.images[0]]
   };
 };
