@@ -125,7 +125,7 @@ export function removeTagFromAllPlaylists(tag_to_remove: string): void {
         try {
           Spicetify.LocalStorage.set(key, JSON.stringify(tags)); 
         } catch (DOMExcpection) {
-          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
         }
 
         // Break the loop as the tag has been found and removed
@@ -156,7 +156,7 @@ function appendTag(playlist_uris: string[], tag?: string): void {
       try {
         Spicetify.LocalStorage.set('tags:' + playlist_uri, JSON.stringify(new_tags)); 
       } catch (DOMExcpection) {
-        Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+        Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
       }
 
       if (current_value === null) {
@@ -198,7 +198,7 @@ function removeTag(playlist_uri: string, tag: string): void {
   try {
     Spicetify.LocalStorage.set('tags:' + playlist_uri, JSON.stringify(new_tags));  
   } catch (DOMExcpection) {
-    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
   }
   
   if (new_tags.length === 0) {
@@ -222,7 +222,7 @@ function registerPlaylistAsTagged(playlist_uri: string): void {
   try {
     Spicetify.LocalStorage.set('tags:taggedPlaylistURIs', JSON.stringify(tagged_playlists));
   } catch (DOMExcpection) {
-    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
   }
 };
 
@@ -240,7 +240,7 @@ function deregisterPlaylistAsTagged(playlist_uri: string): void {
   try {
     Spicetify.LocalStorage.set('tags:taggedPlaylistURIs', JSON.stringify(filtered_playlists));
   } catch (DOMExcpection) {
-    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+    Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
   }
 };
 
@@ -405,7 +405,7 @@ export async function getPlaylistMetadata(playlist_uris: string[]): Promise<Play
       try {
         Spicetify.LocalStorage.set('tags:cache:metadata:' + uri, JSON.stringify(trimMetadata(playlist_metadata)));
       } catch (DOMExcpection) {
-        Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+        Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
       }
     }
     return playlist_metadata;
@@ -585,7 +585,7 @@ export function importTags(tags: string): number {
         try {
           Spicetify.LocalStorage.set(split[0], split[1]);
         } catch (DOMExcpection) {
-          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
           error_encountered = true;
         }
       }
@@ -650,7 +650,7 @@ export async function addPlaylistsToQueue(playlist_data: PlaylistMetadata[], shu
         try {
           Spicetify.LocalStorage.set('tags:cache:contents:' + playlist.uri.replace('spotify:playlist:', ''), JSON.stringify(trimContents(playlist_contents)));
         } catch (DOMExcpection) {
-          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.');
+          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
         }
       }
     } else {
