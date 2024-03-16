@@ -489,6 +489,9 @@ function trimContents(playlist_contents: PlaylistContents) {
 };
 
 /**
+ * Trims the metadata of a playlist to only include the URI, name, description, and the first (high-res) image.
+ * Descriptions are trimmed to the first 32 characters.
+ * Used to save space in local storage when caching.
  * 
  * @param {PlaylistMetadata} playlist_metadata - The metadata to trim.
  * @returns {PlaylistMetadata} The trimmed playlist metadata.
