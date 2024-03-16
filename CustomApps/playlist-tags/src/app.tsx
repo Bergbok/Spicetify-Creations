@@ -1,5 +1,5 @@
 import { PlaylistMetadata } from './types/playlist_metadata.d'
-import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists } from './funcs';
+import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists, removeStringFromStringArray } from './funcs';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import FilterDropdown from './components/filter_dropdown';
 import PlayButton from './components/play_button';
@@ -221,8 +221,9 @@ const App = () => {
                     return 0;
                   }
                 }).map((tag) => {
-                  const last_term: string = ((filterQuery.split(' ').pop() as string) || '').replace(/!/g, '');
-                  if (tag.toLowerCase().includes(last_term.toLowerCase())) {
+                  const filter_query_terms = filterQuery.split(' ');
+                  const last_term_without_exclusion: string = (filter_query_terms[filter_query_terms.length - 1] || '').replace(/!/g, '');
+                  if (tag.toLowerCase().includes(last_term_without_exclusion.toLowerCase())) {
                     return (
                       <SpotifyChip
                         // selectedColorSet={filterQuery.split(' ').includes(tag) ? 'positive' : 'negative'}
@@ -231,28 +232,27 @@ const App = () => {
                           backgroundColor: filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'var(--spice-selected-row)' : '', 
                         }}
                         onClick={() => {
-                          const filter_query_terms = filterQuery.split(' ');
-                          const last_term: string = (filter_query_terms.pop() as string) || '';
+                          const last_term = filter_query_terms[filter_query_terms.length - 1] || '';
                           const is_excluded = (last_term.startsWith('!'));
                           const tag_with_exclusion = is_excluded ? '!' + tag : tag;
                           const excluded_tag = '!' + tag;
-                          
+                    
                           switch (true) {
                             // Removes exclusion tag from search
                             case filter_query_terms.includes(excluded_tag):
-                              setFilterQuery(filter_query_terms.filter(word => word !== excluded_tag).join(' '));
+                              setFilterQuery(removeStringFromStringArray(filter_query_terms, excluded_tag));
                               break;
                             // Removes inclusion tag from search
                             case filter_query_terms.includes(tag):
-                              setFilterQuery(filter_query_terms.filter(word => word !== tag).join(' '));
+                              setFilterQuery(removeStringFromStringArray(filter_query_terms, tag));
                               break;
                             // Adds tag to search
                             default:
-                              setFilterQuery(filter_query_terms.slice(0, -1).join(' ') + ' ' + tag_with_exclusion + ' ');
+                              setFilterQuery(filter_query_terms.slice(0, -1).join(' ') + ' ' + tag_with_exclusion);
                               break;
                           }
                         }}
-                        onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>{/* {tag} */}
+                        onContextMenu={() => {removeTagFromAllPlaylists(tag); setFilterQuery(removeStringFromStringArray(filter_query_terms, tag)); updateTagList()}}>{/* {tag} */}
                         <p dangerouslySetInnerHTML={{ __html: `<span style="color: ${filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'black' : 'var(--spice-text)'}">${tag}</span>` }}></p>
                       </SpotifyChip>
                     );

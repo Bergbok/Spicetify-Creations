@@ -686,6 +686,17 @@ export async function addPlaylistsToQueue(playlist_data: PlaylistMetadata[], shu
 };
 
 /**
+ * Removes a specific string from an array of strings and returns the modified array as a string.
+ * 
+ * @param source - The array of strings from which the target string will be removed.
+ * @param target - The string to be removed from the source array.
+ * @returns The modified array as a string, with the target string removed.
+ */
+export function removeStringFromStringArray(source: string[], target: string) {
+  return source.filter(word => word !== target).join(' ');
+};
+
+/**
  * Uses the Fisher-Yates shuffle algorithm to shuffle an array.
  * 
  * @param {any[]} array - The array to shuffle.
