@@ -3,6 +3,11 @@ import { SettingsSection } from 'spcr-settings';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import { version as CURRENT_VERSION } from '../../package.json';
 
+/**
+ * Checks for updates for Playlist Tags.
+ * Fetches the current version from the GitHub repository and compares it to the installed version.
+ * If an update is available, a notification is displayed.
+ */
 function checkForUpdate() {
   const corsProxy = 'https://cors-proxy.spicetify.app/';
   const url = 'https://raw.githubusercontent.com/Bergbok/Spicetify-Creations/main/CustomApps/playlist-tags/package.json';
@@ -19,6 +24,9 @@ function checkForUpdate() {
     });
 };
 
+/**
+ * Registers the settings for Playlist Tags using spcr-settings.
+ */
 function registerSettings() {
   const settings = new SettingsSection('Playlist Tags Settings', 'playlist-tags-settings');
 
@@ -93,7 +101,12 @@ function registerSettings() {
   settings.pushSettings();
 };
 
-// TO-DO: Update to ContextMenuV2
+/**
+ * Registers a context menu item for folders.
+ * Adds an "Add Tags" option to the context menu for folders.
+ * The option is used to append tags to all playlists in the folder.
+ * @todo Update to ContextMenuV2
+ */
 function registerFolderContextMenuItem() {
   if (!Spicetify.ContextMenu) {
       setTimeout(registerFolderContextMenuItem, 1000);
@@ -114,6 +127,12 @@ function registerFolderContextMenuItem() {
   folderMenuItem.register();
 };
 
+/**
+ * Main function for the Playlist Tags extension.
+ * Waits for Spicetify and the Platform API to be ready, then checks for updates, registers settings, and registers the folder context menu item.
+ * If the current page is a playlist page, it renders the playlist page elements.
+ * It also sets up a listener for page changes.
+ */
 (async () => {
   await waitForSpicetify();
   await waitForPlatformApi('History');
