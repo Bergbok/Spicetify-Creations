@@ -28,13 +28,23 @@ Introduces an improved way of organizing and sharing playlists.
 
 ### History in Sidebar
 
+Adds a shortcut for the "Recently Played" screen to the sidebar.
+
 <p align="left">
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/ded310d5-374a-4238-98b1-bd2fad737604"/></img>
 </p>
 
-Adds a shortcut for the "Recently Played" screen to the sidebar.
-
 [Read more...](/CustomApps/history-in-sidebar/README.md)
+
+### Auto Skip Tracks by Duration
+
+Allows you to automatically skip tracks based on their duration.
+
+<p align="center">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/95a1539d-cc46-48ad-b238-298950d90fee"/></img>
+</p>
+
+[Read more...](/Extensions/auto-skip-tracks-by-duration/README.md)
 
 ## License
 

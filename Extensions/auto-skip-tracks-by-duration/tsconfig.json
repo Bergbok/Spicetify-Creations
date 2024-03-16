@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "jsx": "react",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@shared/*": ["../../libs/shared/src/*"]
+    }
+  },
+  "include": ["./src/**/*", "../../libs/shared/src/types/**/*"]
+}
