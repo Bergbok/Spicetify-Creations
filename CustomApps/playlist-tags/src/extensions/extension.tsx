@@ -9,14 +9,15 @@ import { version as CURRENT_VERSION } from '../../package.json';
  * If an update is available, a notification is displayed.
  */
 function checkForUpdate() {
-  const corsProxy = 'https://cors-proxy.spicetify.app/';
   const url = 'https://raw.githubusercontent.com/Bergbok/Spicetify-Creations/main/CustomApps/playlist-tags/package.json';
-  fetch(corsProxy + url)
+  fetch(url)
     .then(response => response.json())
     .then(package_JSON => {
         console.log(package_JSON.version);
         if (package_JSON.version !== CURRENT_VERSION) {
           Spicetify.showNotification('An update is available for Playlist Tags');
+        } else {
+          console.log('No update available');
         }
     })
     .catch(error => {
@@ -144,6 +145,7 @@ function registerFolderContextMenuItem() {
   }
 
   Spicetify.Platform.History.listen((location: Location) => {
+    console.log(location.pathname);
     handlePageChange(location);
   });
 })();
