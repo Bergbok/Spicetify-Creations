@@ -81,6 +81,7 @@ The import/export tags option can be used to import tags from other users as wel
 - [ ] Renaming tags
 - [ ] Improved "All Tags" page
 - [ ] Improved tag suggestions
+- [ ] Switch to IndexedDB (in progress)
 - [ ] Improved "All Tagged Playlists" page
 - [ ] No assigned cover images first sorting option
 - [x] "Add artist name tag to playlists containing only one artist" option
