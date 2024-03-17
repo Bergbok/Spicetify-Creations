@@ -41,7 +41,7 @@ Adds a shortcut for the "Recently Played" screen to the sidebar.
 Allows you to automatically skip tracks based on their duration.
 
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/95a1539d-cc46-48ad-b238-298950d90fee"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/89a433a5-d214-4a11-8d4f-dfb0823fb3fd"/></img>
 </p>
 
 [Read more...](/Extensions/auto-skip-tracks-by-duration/README.md)
