@@ -145,7 +145,6 @@ function registerFolderContextMenuItem() {
   }
 
   Spicetify.Platform.History.listen((location: Location) => {
-    console.log(location.pathname);
     handlePageChange(location);
   });
 })();
