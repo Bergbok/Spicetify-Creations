@@ -1,4 +1,4 @@
-name: Publish history-in-sidebar 
+name: Publish playlist-tags
 
 on:
     push:
