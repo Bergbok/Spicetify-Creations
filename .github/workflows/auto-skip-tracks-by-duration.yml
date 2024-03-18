@@ -35,7 +35,7 @@ jobs:
                 git config --local user.email "action@github.com"
                 git config --local user.name "GitHub Action"
                 git add dist
-                git commit -m "Publish build result"
+                git commit -m "Publish auto-skip-tracks-by-duration"
                 git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
