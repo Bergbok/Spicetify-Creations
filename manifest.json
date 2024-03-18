@@ -21,9 +21,8 @@
         "name": "Auto Skip Tracks by Duration",
         "description": "Allows you to automatically skip tracks based on their duration.",
         "preview": "https://raw.githubusercontent.com/Bergbok/Spicetify-Creations/main/Extensions/auto-skip-tracks-by-duration/preview.png",
-        "main": "https://github.com/Bergbok/Spicetify-Creations/blob/dist/auto-skip-tracks-by-duration/auto-skip-tracks-by-duration.js",
-        "readme": "README.md",
-        "branch": "dist/auto-skip-tracks-by-duration",
+        "main": "Extensions/auto-skip-tracks-by-duration/dist/auto-skip-tracks-by-duration.js",
+        "readme": "Extensions/auto-skip-tracks-by-duration/README.md",
         "authors": [{"name": "Bergbok", "url": "https://github.com/Bergbok"}],
         "tags": ["autoskip"]
     }
