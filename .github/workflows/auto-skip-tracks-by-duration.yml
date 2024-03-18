@@ -27,6 +27,9 @@ jobs:
               working-directory: Extensions/auto-skip-tracks-by-duration
               run: npm ci
 
+            - name: Remove existing dist folder
+              run: rm -rf dist
+
             - name: Build
               run: npm run build-local
 
@@ -34,7 +37,7 @@ jobs:
               run: |
                 git config --local user.email "action@github.com"
                 git config --local user.name "GitHub Action"
-                git add -A dist
+                git add dist
                 git commit -m "Publish auto-skip-tracks-by-duration"
                 git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
               env:
