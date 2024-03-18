@@ -29,3 +29,13 @@ jobs:
 
             - name: Build
               run: npm run build-local
+
+            - name: Commit and push changes
+              run: |
+                git config --local user.email "action@github.com"
+                git config --local user.name "GitHub Action"
+                git add dist
+                git commit -m "Publish build result"
+                git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
