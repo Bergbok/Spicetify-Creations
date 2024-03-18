@@ -22,7 +22,7 @@ async function main() {
   while (!Spicetify?.Player?.addEventListener) {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
-  
+
   Spicetify.Player.addEventListener('songchange', (event) => {
     if (event?.data?.duration) {
       const min_track_length_ms = parseInt(JSON.parse(Spicetify.LocalStorage.get('auto-skip-tracks-by-length.min-track-length') || '5').value) * 1000;
@@ -31,6 +31,7 @@ async function main() {
 
       if (event.data.duration < min_track_length_ms || (skip_tracks_over_max_length && event.data.duration > max_track_length_ms)) {
         Spicetify.Player.next();
+        console.log('Skipped song');
       } 
     }
   });
