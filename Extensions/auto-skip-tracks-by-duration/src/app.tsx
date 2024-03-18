@@ -31,7 +31,6 @@ async function main() {
 
       if (event.data.duration < min_track_length_ms || (skip_tracks_over_max_length && event.data.duration > max_track_length_ms)) {
         Spicetify.Player.next();
-        console.log('Skipped song');
       } 
     }
   });
