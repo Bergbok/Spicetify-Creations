@@ -13,7 +13,6 @@ function checkForUpdate() {
   fetch(url)
     .then(response => response.json())
     .then(package_JSON => {
-        console.log(package_JSON.version);
         if (package_JSON.version !== CURRENT_VERSION) {
           Spicetify.showNotification('An update is available for Playlist Tags');
         } else {
