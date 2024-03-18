@@ -22,9 +22,9 @@ Download it using [Spicetify Marketplace](https://github.com/spicetify/spicetify
 
 **Manual**:
 
-1. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/auto-skip-tracks-by-duration.zip)
+1. Download it from [here](https://raw.githubusercontent.com/Bergbok/Spicetify-Creations/main/Extensions/auto-skip-tracks-by-duration/dist/auto-skip-tracks-by-duration.js) (right-click the page and select _Save Page As..._)
 2. Run `spicetify config-dir` in a terminal
-3. Extract `auto-skip-tracks-by-duration.js` into the Extensions folder
+3. Move `auto-skip-tracks-by-duration.js` into the Extensions folder
 4. Run `spicetify config extensions auto-skip-tracks-by-duration.js`
 5. Run `spicetify apply`
 
