@@ -893,6 +893,10 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
   container.style.flexWrap = 'wrap';
   container.style.marginLeft = '30px';
 
+  if (Spicetify.Config.current_theme == 'Comfy') {
+    container.style.marginBottom = '30px';
+  }
+
   // @ts-ignore
   const Chip: any = Spicetify.ReactComponent.Chip;
   
