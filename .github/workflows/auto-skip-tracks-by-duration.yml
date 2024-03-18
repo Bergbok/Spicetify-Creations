@@ -1,6 +1,7 @@
 name: Publish auto-skip-tracks-by-duration
 
 on:
+    workflow_dispatch:
     push:
         branches: ['main']
         paths: ['Extensions/auto-skip-tracks-by-duration/**']
