@@ -44,7 +44,7 @@ const App = () => {
 
   // Updates playlist data when the active navigation bar tab changes.
   useEffect(() => {
-    if (activeLink === "Search") {
+    if (activeLink === 'Search') {
       const tags = [getCurrentPageURI()];
       setFilterQuery(tags.map(tag => tag).join(' '));
       const playlist_uris = getPlaylistsTaggedAs(tags, selectedFilterOption);
@@ -54,7 +54,7 @@ const App = () => {
         setIsLoading(false);
       });
     }
-    if (activeLink === "All Tagged Playlists") {
+    if (activeLink === 'All Tagged Playlists') {
       const stored_value = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
       const playlist_uris = stored_value ? JSON.parse(stored_value) : [];
       setIsLoading(true);
@@ -204,7 +204,7 @@ const App = () => {
                   onChange={handleSearchChange}/>
               </div>
               <FilterDropdown items={['Match Any Tag (OR)', 'Match All Tags (AND)']} onSelect={(value: string) => { setFilterOption(value) }}></FilterDropdown>
-              <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A']} onSelect={(value: string) => { setSortingOption(value) }} />
+              <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A', 'No covers first']} onSelect={(value: string) => { setSortingOption(value) }} selected={selectedSortingOption}/>
             </div>
             <div className='tag-list-wrapper'>
               {
@@ -309,6 +309,17 @@ const App = () => {
     case "All Tagged Playlists":
       return (
         <>
+          <style>
+            {`
+              .all-playlists-page-sort-dropdown-wrapper {
+                padding-left: calc(50% - 110px);
+                padding-bottom: 15px;
+              }
+            `}
+          </style>
+          <div className='all-playlists-page-sort-dropdown-wrapper'>
+            <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A', 'No covers first']} onSelect={(value: string) => { setSortingOption(value) }} selected={selectedSortingOption} />
+          </div>
           {
             playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading, filterQuery)
           }

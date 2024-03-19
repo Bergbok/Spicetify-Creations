@@ -830,6 +830,23 @@ export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_optio
     case 'Description: Z-A':
       playlist_data = sortByDescription(playlist_data, 'DESC');
       break;
+    case 'No covers first':
+      playlist_data.sort((a, b) => {
+        const a_image = a.images[0];
+        const b_image = b.images[0];
+    
+        const a_is_priority = a_image === null || a_image.url.startsWith('spotify:mosaic:');
+        const b_is_priority = b_image === null || b_image.url.startsWith('spotify:mosaic:');
+    
+        if (a_is_priority && !b_is_priority) {
+          return -1;
+        } else if (!a_is_priority && b_is_priority) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      break;
     default:
       break;
   }

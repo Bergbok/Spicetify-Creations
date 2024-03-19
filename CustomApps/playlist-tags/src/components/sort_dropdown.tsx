@@ -10,6 +10,7 @@ import React from 'react';
 interface SortDropdownProps {
     items: string[];
     onSelect: (value: string) => void;
+    selected?: string;
 };
 
 /**
@@ -19,7 +20,7 @@ interface SortDropdownProps {
  * @param {SortDropdownProps} props - The props for the component.
  * @returns {JSX.Element} The SortDropdown component.
  */
-const SortDropdown = ({ items, onSelect }: SortDropdownProps) => {
+const SortDropdown = ({ items, onSelect, selected }: SortDropdownProps) => {
     return (
         <React.Fragment>
             <style>
@@ -35,6 +36,7 @@ const SortDropdown = ({ items, onSelect }: SortDropdownProps) => {
             <div className = 'sort-dropdown-wrapper'>
                 <Spicetify.ReactComponent.Dropdown
                     onSelect={onSelect}
+                    value={selected}
                 >
                 {
                     items.map((item, index) => (
