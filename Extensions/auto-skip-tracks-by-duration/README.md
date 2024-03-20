@@ -20,6 +20,8 @@ Be careful not to cause any skipping loops by playing albums/playlists where no 
 
 Download it using [Spicetify Marketplace](https://github.com/spicetify/spicetify-marketplace) from within Spotify.
 
+> Currently Marketplace doesn't properly support having CustomApps and extensions in the same repo, thus you'll need to download it manually.
+
 **Manual**:
 
 1. Download it from [here](https://raw.githubusercontent.com/Bergbok/Spicetify-Creations/main/Extensions/auto-skip-tracks-by-duration/dist/auto-skip-tracks-by-duration.js) (right-click the page and select _Save Page As..._)
