@@ -28,7 +28,7 @@ Introduces an improved way of organizing and sharing playlists.
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/df48a94e-a8f3-4c52-a7b6-5dbf194f0a52"/></img>
 </p>
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/5519b3ff-6e0b-4be4-aa70-0aca43ef2880"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/94e49b0d-8f91-44b5-bca2-181c077fad5c"/></img>
 </p>
 
 ### Removing Tags
