@@ -146,4 +146,15 @@ function registerFolderContextMenuItem() {
   Spicetify.Platform.History.listen((location: Location) => {
     handlePageChange(location);
   });
+
+  const observer = new MutationObserver(() => {
+    if (Spicetify.Platform.History.location.pathname.startsWith('/preferences')) {
+      const buttons = document.querySelectorAll('.Button-sm-buttonSecondary-isUsingKeyboard-useBrowserDefaultFocusStyle.x-settings-button');
+      buttons.forEach(button => {
+        button.className = 'Button-sc-y0gtbx-0 Button-small-buttonSecondary-useBrowserDefaultFocusStyle x-settings-button';
+      });
+    }
+  });
+  
+  observer.observe(document.body, { childList: true, subtree: true });
 })();
