@@ -36,6 +36,8 @@ Adds a shortcut for the "Recently Played" screen to the sidebar.
 
 [Read more...](/CustomApps/history-in-sidebar/README.md)
 
+## Extensions
+
 ### Auto Skip Tracks by Duration
 
 Allows you to automatically skip tracks based on their duration.
