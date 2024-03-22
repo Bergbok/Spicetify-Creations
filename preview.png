@@ -48,10 +48,6 @@ Right-clicking a tag on the "Search" or "All Tags" pages removes them from all p
 </p>
 
 > Implemented using spcr-settings
-> 
-> NOTE:
-> Currently the button class spcr-settings uses is outdated so your buttons are gonna be pretty ugly until it gets fixed <br>
-> I already opened a [pull request](https://github.com/FlafyDev/spicetify-creator-plugins/pull/10) that fixes the issue
 
 Enabling "Use metadata cache" and "Use tracklist cache" speeds up searches and playing a lot, however it also takes up space in Spotify's local storage which is limited to ~10MB. 
 <br>
