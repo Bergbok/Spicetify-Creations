@@ -1,3 +1,4 @@
+import { MassTagOperation } from './types/mass_tag_operations.d';
 import { PlaylistContents } from './types/playlist_contents.d';
 import { PlaylistMetadata } from './types/playlist_metadata.d';
 import { renderElement } from '@shared/utils/react-utils';
@@ -7,133 +8,6 @@ import SpotifyCard from './components/spotify_card';
 import TextInputDialog from "./components/text_input_dialog";
 
 //////////////////////////////////////// TAGGING FUNCTIONS /////////////////////////////////////////
-
-enum MassTagOperation {
-  AddArtistTag,
-  AddCreatorDisplayNameTag,
-  AddLocalFilesTag,
-  AddUnplayableTag,
-  AddYearTag
-}
-
-/**
- * Appends tags to all playlists in a folder.
- *
- * @param {string} folder_uri - The URI of the folder to append tags to.
- * @returns {Promise<void>} A Promise that resolves when the operation is complete.
- */
-export async function appendTagsToFolderPlaylists(folder_uri: string): Promise<void> {
-  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
-  let folder_data = findFolder(rootlist, folder_uri);
-  if (folder_data) {
-    appendTag(getFolderPlaylistURIs(folder_data));
-  }
-};
-
-/**
- * Appends [artist:<artist>] tags to all playlists containing only one artist.
- * 
- * @returns {Promise<void>} A Promise that resolves when the operation is complete.
- */
-export async function appendArtistTagToPlaylistsContainingOneArtist(): Promise<void> {
-  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
-  for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], MassTagOperation.AddArtistTag);
-  }
-  Spicetify.showNotification('Finished processing playlists');
-};
-
-/**
- * Appends [by:<username>] tags to all playlists.
- * 
- * @returns {Promise<void>} A Promise that resolves when the operation is complete.
- */
-export async function appendCreatorDisplayNameTagToAllPlaylists(): Promise<void> {
-  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
-  for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], MassTagOperation.AddCreatorDisplayNameTag);
-  }
-  Spicetify.showNotification('Finished processing playlists');
-};
-
-/**
- * Appends a tag to all playlists containing local files.
- * 
- * @param {string} tag - The tag to append.
- * @returns {Promise<void>} A Promise that resolves when the operation is complete.
- */
-export async function appendTagToPlaylistsContainingLocalFiles(tag: string): Promise<void> {
-  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
-  for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], MassTagOperation.AddLocalFilesTag, tag);
-  }
-  Spicetify.showNotification('Finished processing playlists');
-};
-
-/**
- * Appends [unplayable] tags to all unplayable playlists.
- * 
- * @returns {Promise<void>} A Promise that resolves when the operation is complete.
- */
-export async function appendUnplayableTagToUnplayable(): Promise<void> {
-  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
-  for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], MassTagOperation.AddUnplayableTag);
-  }
-  Spicetify.showNotification('Finished processing playlists');
-};
-
-/**
- * Appends [year:<year>] tags to all playlists containing.
- * a year as the first four characters in the description.
- * 
- * @returns {Promise<void>} A Promise that resolves when the operation is complete.
- */
-export async function appendYearTagToPlaylistsContaingYearInDescription(): Promise<void> {
-  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
-  for (let i = 0; i < rootlist.items.length; i++) {
-    await processItem(rootlist.items[i], MassTagOperation.AddYearTag);
-  }
-  Spicetify.showNotification('Finished processing playlists');
-};
-
-/**
- * Removes a tag from all playlists.
- * 
- * @param {string} tag_to_remove - The tag to remove.
- */
-export function removeTagFromAllPlaylists(tag_to_remove: string): void {
-  let keys: string[] = [];
-  
-  JSON.parse(Spicetify.LocalStorage.get('tags:taggedPlaylistURIs') || '[]').forEach((uri: string) => {
-    keys.push('tags:' + uri);
-  });
-
-  // Loop through all keys
-  keys.forEach(key => {
-    // Get the tags for the playlist
-    let tags = JSON.parse(Spicetify.LocalStorage.get(key) || '[]');
-
-    // Loop through each tag
-    for (let i = 0; i < tags.length; i++) {
-      // Check if the tag is the one to remove
-      if (tags[i] === tag_to_remove) {
-        // Remove the tag from the playlist
-        tags = tags.filter((t: string) => t !== tag_to_remove);
-
-        // Update the tags in local storage
-        try {
-          Spicetify.LocalStorage.set(key, JSON.stringify(tags)); 
-        } catch (DOMExcpection) {
-          Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
-        }
-
-        // Break the loop as the tag has been found and removed
-        break;
-      }
-    }
-  });
-};
 
 /**
  * Appends a tag to playlists.
@@ -245,18 +119,95 @@ function deregisterPlaylistAsTagged(playlist_uri: string): void {
 };
 
 /**
+ * Appends tags to all playlists in a folder.
+ *
+ * @param {string} folder_uri - The URI of the folder to append tags to.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export async function appendTagsToFolderPlaylists(folder_uri: string): Promise<void> {
+  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
+  let folder_data = findFolder(rootlist, folder_uri);
+  if (folder_data) {
+    appendTag(getFolderPlaylistURIs(folder_data));
+  }
+};
+
+/**
+ * Appends a tag to all playlists based on the specified operation.
+ * 
+ * @param {MassTagOperation} operation - The operation to perform.
+ * @param {string} [tag] - The tag to append (optional).
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export async function appendTagToAllPlaylists(operation: MassTagOperation, tag?: string, exclude_non_english_chars?: boolean, va_threshold?: number): Promise<void> {
+  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
+  for (let i = 0; i < rootlist.items.length; i++) {
+    if (operation === MassTagOperation.AddArtistTag) {
+      await processPlaylists(rootlist.items[i], operation, tag, exclude_non_english_chars, va_threshold);
+    } else {
+      await processPlaylists(rootlist.items[i], operation, tag);
+    }
+  }
+  Spicetify.showNotification('Finished processing playlists');
+};
+
+/**
+ * Removes a specified tag from all tagged playlists.
+ * @param regex - The regular expression used to match the tag.
+ * @param less_than_count - The minimum count the tag must be assigned to be removed. Defaults to 0.
+ */
+export function removeTagFromAllPlaylists(regex: RegExp, less_than_count: number = 0): void {
+  const uris: string[] = JSON.parse(Spicetify.LocalStorage.get('tags:taggedPlaylistURIs') || '[]');
+  const tag_counts: Record<string, number> = {};
+
+  // Determine tag counts
+  if (less_than_count > 0) {
+    uris.forEach(uri => {
+      const tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + uri) || '[]');
+      tags.forEach((tag: string) => {
+        tag_counts[tag] = (tag_counts[tag] || 0) + 1;
+      });
+    });
+  };
+
+  // Loop through all tagged playlists
+  uris.forEach(uri => {
+    let tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + uri) || '[]');
+
+    // Filter the tags
+    tags = tags.filter((t: string) => {
+      return !regex.test(t) || (less_than_count > 0 && tag_counts[t] >= less_than_count);
+    });
+
+    // Update the tags in local storage
+    try {
+      Spicetify.LocalStorage.set('tags:' + uri, JSON.stringify(tags)); 
+    } catch (DOMExcpection) {
+      Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
+    }
+
+    // If the playlist doesn't have any tags left, deregister it as tagged
+    if (tags.length === 0) {
+      deregisterPlaylistAsTagged(uri);
+    }
+  });
+};
+
+/**
  * Handles mass tagging operations.
  *
  * @param {any} item - The item to process.
  * @param {MassTagOperation} operation - The operation to perform.
- * @param {string} [tag] - The tag to append, currently only used for the AddLocalFilesTag operation.
+ * @param {string} [tag] - The tag to append, currently only used for the AddLocalFilesTag and AddUnplayableTag operations.
+ * @param {boolean} [exclude_non_english_chars] - Whether or not to exclude artists with non-english characters from the AddArtistTag operation.
+ * @param {number} [va_threshold] - The threshold for the AddArtistTag operation.
  * @todo Add type for the item object.
  */
-async function processItem(item: any, operation: MassTagOperation, tag?: string): Promise<void> {
+async function processPlaylists(item: any, operation: MassTagOperation, tag?: string, exclude_non_english_chars: boolean = true, va_threshold: number = 5): Promise<void> {
   // If the item is a folder, processes each item in the folder
   if (item.type === 'folder') {
     for (let i = 0; i < item.items.length; i++) {
-      await processItem(item.items[i], operation, tag);
+      await processPlaylists(item.items[i], operation, tag);
     }
   } else if (item.type === 'playlist') {
     const item_tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + item.uri.replace('spotify:playlist:','')) || '[]');
@@ -266,18 +217,37 @@ async function processItem(item: any, operation: MassTagOperation, tag?: string)
           const playlist_contents: PlaylistContents = await Spicetify.Platform.PlaylistAPI.getContents(item.uri);
           
           // Gets the artists of all items
-          const artists = playlist_contents.items.filter(item => item.artists && item.artists.length > 0).map(item => item.artists[0].name);
+          let artists = playlist_contents.items
+            .filter(item => item.artists && item.artists.length > 0)
+            .flatMap(item => item.artists.map(artist => artist.name.trim().split(/,|;| - /).map(name => name.trim())))
+            .flat()
+          
+          if (exclude_non_english_chars) {
+            artists = artists.filter(artist => {
+              const is_match = /[^\u0000-\u05C0\u2100-\u214F“”’・€]+/.test(artist);
+              if (is_match) {
+                console.log(`Artist "${artist}" failed the regex test.`);
+              }
+              return !is_match;
+            });
+          }
           
           // Creates a set from the artists array
           const unique_artists = new Set(artists);
           
-          // Checks if all items contain the same artist
-          const contains_only_one_artist = unique_artists.size === 1;
-          
-          if (contains_only_one_artist) {
-            const only_artist_name = artists[0].replace(/ /g, '-');
-            appendTag([item.uri.replace('spotify:playlist:','')], '[artist:' + only_artist_name + ']');
-            console.log('Added "[artist:' + only_artist_name + ']" tag to:', item.uri);
+          // Checks the size of the unique_artists set
+          if (unique_artists.size <= va_threshold) {
+            for (const artist_name of unique_artists) {
+              let formatted_artist_name = artist_name.replace(/ /g, '-');
+              if (formatted_artist_name === 'Various-Artists' || formatted_artist_name === 'Various' || formatted_artist_name === 'V.A.' || formatted_artist_name === 'V A') {
+                formatted_artist_name = 'VA';
+              }
+              appendTag([item.uri.replace('spotify:playlist:','')], '[artist:' + formatted_artist_name + ']');
+              console.log('Added "[artist:' + formatted_artist_name + ']" tag to:', item.uri);
+            }
+          } else {
+            appendTag([item.uri.replace('spotify:playlist:','')], '[artist:VA]');
+            console.log('Added "[artist:VA]" tag to:', item.uri);
           }
           break;
         }
@@ -307,8 +277,8 @@ async function processItem(item: any, operation: MassTagOperation, tag?: string)
           const playlist_metadata: PlaylistMetadata = await Spicetify.Platform.PlaylistAPI.getMetadata(item.uri);
           const can_play = playlist_metadata.canPlay;
           if (!can_play) {
-            appendTag([item.uri.replace('spotify:playlist:','')], '[unplayable]');
-            console.log('Added "[unplayable]" tag to:', item.uri);
+            appendTag([item.uri.replace('spotify:playlist:','')], tag);
+            console.log('Added "' + tag + '" tag to:', item.uri);
             break;
           }
         }
@@ -349,6 +319,25 @@ function findFolder(root: any, folder_uri: string): any {
       }
     }
   }
+};
+
+/**
+ * Gets the playlists in a folder.
+ * 
+ * @param {any} folder_data - The folder to get the playlists of.
+ * @returns {string[]} An array of playlist URIs.
+ * @todo Add type for the folder object.
+ */
+function getFolderPlaylistURIs(folder_data: any) {
+  let playlist_uris: string[] = [];
+  for (let item of folder_data.items) {
+    if (item.type === 'playlist') {
+      playlist_uris.push(item.uri.replace('spotify:playlist:', ''));
+    } else if (item.type === 'folder') {
+      playlist_uris = playlist_uris.concat(getFolderPlaylistURIs(item));
+    }
+  }
+  return playlist_uris;
 };
 
 /**
@@ -408,6 +397,7 @@ export async function getPlaylistMetadata(playlist_uris: string[]): Promise<Play
         Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
       }
     }
+    playlist_metadata.desciption = playlist_metadata.description.substring(0, 36);
     return playlist_metadata;
   }));
   return data;
@@ -454,25 +444,6 @@ export function getPlaylistsTaggedAs(tags: string[], filter_option: string): str
   }
 };
 
-/**
- * Gets the playlists in a folder.
- * 
- * @param {any} folder_data - The folder to get the playlists of.
- * @returns {string[]} An array of playlist URIs.
- * @todo Add type for the folder object.
- */
-function getFolderPlaylistURIs(folder_data: any) {
-  let playlist_uris: string[] = [];
-  for (let item of folder_data.items) {
-    if (item.type === 'playlist') {
-      playlist_uris.push(item.uri.replace('spotify:playlist:', ''));
-    } else if (item.type === 'folder') {
-      playlist_uris = playlist_uris.concat(getFolderPlaylistURIs(item));
-    }
-  }
-  return playlist_uris;
-};
-
 //////////////////////////////////////// TRIMMING FUNCTIONS ////////////////////////////////////////
 
 /**
@@ -500,12 +471,22 @@ function trimMetadata(playlist_metadata: PlaylistMetadata) {
   return {
     uri: playlist_metadata.uri.replace('spotify:playlist:', ''),
     name: playlist_metadata.name,
-    description: playlist_metadata.description.substring(0, 32),
+    description: playlist_metadata.description.substring(0, 36),
     images: [playlist_metadata.images[0]]
   };
 };
 
 ////////////////////////////////////// LOCALSTORAGE FUNCTIONS //////////////////////////////////////
+
+/**
+ * Gets all keys in local storage that start with 'tags:'.
+ * 
+ * @returns {string[]} An array of all keys in local storage that start with 'tags:'.
+ */
+function getAllTagKeys(): string[] {
+  let values = Object.keys(localStorage).filter((key)=> key.startsWith('tags:'));
+  return values;
+};
 
 /**
  * Removes all keys starting with 'tags:' from local storage.
@@ -583,6 +564,7 @@ export function importTags(tags: string): number {
       const split = tag.split(' === ');
       if (split.length === 2) {
         try {
+          registerPlaylistAsTagged(split[0].split(':')[1]);
           Spicetify.LocalStorage.set(split[0], split[1]);
         } catch (DOMExcpection) {
           Spicetify.showNotification('Maximum local storage qouta reached! Clear your cache in settings.', true);
@@ -600,10 +582,10 @@ export function importTags(tags: string): number {
  * @param {boolean} [exclude_contains_local_files_tag] - Whether to exclude playlists tagged as [contains-local-files].
  * @returns {string} A string containing importable tags.
  */
-export function exportTags(exclude_contains_local_files_tag?: boolean): string {
+export function exportTags(exclude_contains_local_files_tag: boolean): string {
   let exported_tags: string = '';
   getAllTagKeys().forEach(key => {
-    if (!key.startsWith('tags:cache:')){
+    if (!key.startsWith('tags:cache:') && !key.startsWith('tags:taggedPlaylistURIs')) {
       let key_value = Spicetify.LocalStorage.get(key);
       if (key_value?.includes('[contains-local-files]') && exclude_contains_local_files_tag) {
         return;
@@ -615,13 +597,25 @@ export function exportTags(exclude_contains_local_files_tag?: boolean): string {
 };
 
 /**
- * Gets all keys in local storage that start with 'tags:'.
+ * Retrieves the tag counts for tagged playlists.
  * 
- * @returns {string[]} An array of all keys in local storage that start with 'tags:'.
+ * @returns A string representation of the tag counts.
  */
-function getAllTagKeys(): string[] {
-  let values = Object.keys(localStorage).filter((key)=> key.startsWith('tags:'));
-  return values;
+export function getTagCounts(): string {
+  const tagged_playlist_uris = JSON.parse(Spicetify.LocalStorage.get('tags:taggedPlaylistURIs') || '[]');
+  let tag_counts: Record<string, number> = {};
+
+  tagged_playlist_uris.forEach((uri: string) => {
+    const tags = JSON.parse(Spicetify.LocalStorage.get('tags:' + uri) || '[]');
+    tags.forEach((tag: string) => {
+      tag_counts[tag] = (tag_counts[tag] || 0) + 1;
+    });
+  });
+
+  return Object.entries(tag_counts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([tag, count]) => `${tag}: ${count}`)
+    .join('\n');
 };
 
 ////////////////////////////////////////// MISC FUNCTIONS //////////////////////////////////////////
@@ -695,6 +689,16 @@ export async function addPlaylistsToQueue(playlist_data: PlaylistMetadata[], shu
 export function removeStringFromStringArray(source: string[], target: string) {
   return source.filter(word => word !== target).join(' ');
 };
+
+/**
+ * Escapes special characters in a string to be used in a regular expression.
+ * 
+ * @param string - The string to escape.
+ * @returns The escaped string.
+ */
+export function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 /**
  * Uses the Fisher-Yates shuffle algorithm to shuffle an array.
@@ -794,17 +798,17 @@ function sortTags(tags: string[], sorting_option: string): string[] {
  */
 export function handlePageChange(location: Location): void {
   let current_playlist_uri = getCurrentPageURI();
-    if (location.pathname.startsWith('/playlist/')) {
-      let previous_playlist_url = current_playlist_uri;
-      current_playlist_uri = getCurrentPageURI();
-      if (previous_playlist_url === current_playlist_uri) {
-        removePlaylistPageElements();
-      }
-      let tags = getPlaylistTags(current_playlist_uri);
-      renderPlaylistPageElements(tags);
-    } else {
+  if (location.pathname.startsWith('/playlist/')) {
+    let previous_playlist_url = current_playlist_uri;
+    current_playlist_uri = getCurrentPageURI();
+    if (previous_playlist_url === current_playlist_uri) {
       removePlaylistPageElements();
     }
+    let tags = getPlaylistTags(current_playlist_uri);
+    renderPlaylistPageElements(tags);
+  } else {
+    removePlaylistPageElements();
+  }
 };
 
 /**

@@ -1,5 +1,5 @@
+import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists, removeStringFromStringArray, escapeRegExp } from './funcs';
 import { PlaylistMetadata } from './types/playlist_metadata.d'
-import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists, removeStringFromStringArray } from './funcs';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import FilterDropdown from './components/filter_dropdown';
 import PlayButton from './components/play_button';
@@ -248,11 +248,11 @@ const App = () => {
                               break;
                             // Adds tag to search
                             default:
-                              setFilterQuery(filter_query_terms.slice(0, -1).join(' ') + ' ' + tag_with_exclusion);
+                              setFilterQuery(filter_query_terms.slice(0, -1).join(' ') + ' ' + tag_with_exclusion + ' ');
                               break;
                           }
                         }}
-                        onContextMenu={() => {removeTagFromAllPlaylists(tag); setFilterQuery(removeStringFromStringArray(filter_query_terms, tag)); updateTagList()}}>{/* {tag} */}
+                        onContextMenu={() => {removeTagFromAllPlaylists(new RegExp(escapeRegExp(tag))); setFilterQuery(removeStringFromStringArray(filter_query_terms, tag)); updateTagList()}}>{/* {tag} */}
                         <p dangerouslySetInnerHTML={{ __html: `<span style="color: ${filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'black' : 'var(--spice-text)'}">${tag}</span>` }}></p>
                       </SpotifyChip>
                     );
@@ -296,7 +296,7 @@ const App = () => {
                         }
                         setActiveLink('Search');
                       }}
-                      onContextMenu={() => {removeTagFromAllPlaylists(tag); updateTagList()}}>{tag}
+                      onContextMenu={() => {removeTagFromAllPlaylists(new RegExp(tag)); updateTagList()}}>{tag}
                     </SpotifyChip>
                   ))
                 }
