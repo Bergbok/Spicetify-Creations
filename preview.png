@@ -44,7 +44,10 @@ Right-clicking a tag on the "Search" or "All Tags" pages removes them from all p
 ### Settings
 
 <p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/6ed9f649-4fa0-4bec-a1db-b37f7d29ee2a"/></img>
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/297da8c6-8f69-426a-ae96-8a0e2f4ccf7a"/></img>
+</p>
+<p align="center">
+  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d151b2fa-b71f-43cf-9d63-727a0d9dd475"/></img>
 </p>
 
 > Implemented using spcr-settings
@@ -59,6 +62,8 @@ To see how much space is being used by tags use the "Copy local storage key size
 
 The import/export tags option can be used to import tags from other users as well, you can get my tags here: 
 - https://gist.github.com/Bergbok/c7503bcb7ba2699ae10830b5aacbf333 (takes up ~2MB of local storage)
+
+Threshold for [artist:VA] tag corresponds to the amount of artists a playlist can contain before it gets tagged as [artist:VA] instead.
 
 ## Installation
 
@@ -79,10 +84,10 @@ The import/export tags option can be used to import tags from other users as wel
 - [x] "Add artist name tag to playlists containing only one artist" option
 - [x] "Add unplayable tag to playlists without playable tracks" option
 - [x] "Add year tag to playlists containg year in description" option
-- [x] Switch to IndexedDB (scrapped due to worse performance)
 - [x] No assigned cover images first sorting option
-- [x] Improved "All Tagged Playlists" page
 - [x] Debouncing (performance improvement)
+- [x] Improved "All Tagged Playlists" page
+- [x] Switch to IndexedDB (scrapped)
 - [x] Case insensitive searching
 - [x] AND/OR filter options
 
