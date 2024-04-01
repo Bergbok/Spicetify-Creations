@@ -17,12 +17,6 @@ Introduces an improved way of organizing and sharing playlists.
   <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/2d368f0e-e48f-49b0-8d60-2401f3a7baf9"/></img>
 </p>
 
-> V1.4: Now supports AND/OR filter options
-
-<p align="center">
-  <img src="https://github.com/Bergbok/Spicetify-Creations/assets/66174189/d1f0a204-6f3e-460e-8e5b-dc756d9c584e"/></img>
-</p>
-
 [Read more...](/CustomApps/playlist-tags/README.md)
 <hr>
 
