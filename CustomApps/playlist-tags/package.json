@@ -1,6 +1,6 @@
 {
   "name": "playlist-tags",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "private": true,
   "scripts": {
     "build": "spicetify-creator",
@@ -20,7 +20,7 @@
     "marked": "^12.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "spcr-navigation-bar": "^0.0.2",
+    "spcr-navigation-bar": "^0.0.3",
     "spcr-settings": "^1.3.0"
   }
 }
