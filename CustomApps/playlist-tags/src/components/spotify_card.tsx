@@ -70,12 +70,25 @@ function SpotifyCard(props: SpotifyCardProps): React.ReactElement<HTMLDivElement
                             isCircular={type === "artist"}/>
                     )}
                     renderSubHeaderContent={() => (
-                        <TextComponent 
-                            as="div" 
-                            variant="mesto" 
-                            semanticColor="textSubdued" 
-                            children={he.decode(subheader)} 
-                            style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}/>
+                        <React.Fragment>
+                            <style>
+                            {`
+                                .playlist-text {
+                                    width: 169px;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow-wrap: break-word;
+                                }
+                            `}
+                            </style>
+                            <TextComponent 
+                                as="div" 
+                                variant="mesto" 
+                                semanticColor="textSubdued" 
+                                children={he.decode(subheader)}
+                                className="playlist-text"/>
+                        </React.Fragment>
                     )}
                     uri={uri}/>
             </ContextMenu>
