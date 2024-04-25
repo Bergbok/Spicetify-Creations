@@ -918,7 +918,9 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
   container.style.width = '96%';
   container.style.display = 'flex';
   container.style.flexWrap = 'wrap';
-  container.style.marginLeft = '30px';
+  container.style.marginTop = '4px';
+  container.style.marginLeft = '25px';
+  container.style.marginBottom = '16px';
 
   if (Spicetify.Config.current_theme == 'Comfy') {
     container.style.marginBottom = '30px';
@@ -966,7 +968,7 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
 
   await waitForElement('div.playlist-playlist-playlistContent');
 
-  const target = await waitForElement('div.contentSpacing.main-entityHeader-container.main-entityHeader-nonWrapped');
+  const target = await waitForElement('#main > div > div.Root__top-container > div.Root__main-view > div.main-view-container > div.main-view-container__scroll-node > div:nth-child(2) > div.main-view-container__scroll-node-child > main > div > section > div.playlist-playlist-playlistContent > div:nth-child(2) > div:nth-child(2) > div');
   if (target !== null) {
     target.parentNode?.insertBefore(container, target.nextSibling);
     isRenderingPlaylistPageElements = false;
