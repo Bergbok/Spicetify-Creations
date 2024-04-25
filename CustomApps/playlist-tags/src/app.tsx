@@ -17,13 +17,13 @@ const App = () => {
   // Handles which items to display in the navigation bar based on user settings
   const default_navbar_items = ["Search", "All Tags", "All Tagged Playlists", "README"];
   let navbar_items = default_navbar_items;
-  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.navbar-all-tags-page') || 'false').value) {
+  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-all-tags-page') || 'false').value) {
     navbar_items = navbar_items.filter(item => item !== "All Tags");
   }
-  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.navbar-all-tagged-playlists-page') || 'false').value) {
+  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-all-tagged-playlists-page') || 'false').value) {
     navbar_items = navbar_items.filter(item => item !== "All Tagged Playlists");
   }
-  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.navbar-README') || 'false').value) {
+  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-README') || 'false').value) {
     navbar_items = navbar_items.filter(item => item !== "README");
   }
   
