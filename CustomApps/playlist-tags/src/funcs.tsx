@@ -906,7 +906,13 @@ export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_optio
  * @param {string[]} tags - Tags to render.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
+let isRenderingPlaylistPageElements = false;
 export async function renderPlaylistPageElements(tags: string[]): Promise<void> {
+  if (isRenderingPlaylistPageElements) {
+    return;
+  }
+  isRenderingPlaylistPageElements = true;
+  
   const container = document.createElement('div');
   container.className = 'tag-list';
   container.style.width = '96%';
@@ -963,6 +969,7 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
   const target = await waitForElement('div.contentSpacing.main-entityHeader-container.main-entityHeader-nonWrapped');
   if (target !== null) {
     target.parentNode?.insertBefore(container, target.nextSibling);
+    isRenderingPlaylistPageElements = false;
   }
 };
   
