@@ -31,16 +31,23 @@ const App = () => {
   const SpotifyChip: any = Spicetify.ReactComponent.Chip;
 
   // React State Hooks 
-  const [tagList, setTags] = useState(getAllTags('A-Z'));
-  const [shuffleState, setIsEnabled] = useState(false);
-  const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
-  const [selectedFilterOption, setFilterOption] = useState('Match Any Tag (OR)');
-  const [playlistData, setPlaylistData] = useState<Array<PlaylistMetadata>>([]);
-  const [navBar, activeLink, setActiveLink] = useNavigationBar(navbar_items);
-  const [isLoading, setIsLoading] = useState(false);
-  const [inputFocused, setIsFocused] = useState(false);
   const [filterQuery, setFilterQuery] = useState('');
+  const [inputFocused, setIsFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [navBar, activeLink, setActiveLink] = useNavigationBar(navbar_items);
+  const [navBarValue, setNavBarValue] = useState('');
+  const [playlistData, setPlaylistData] = useState<Array<PlaylistMetadata>>([]);
+  const [selectedFilterOption, setFilterOption] = useState('Match Any Tag (OR)');
+  const [selectedSortingOption, setSortingOption] = useState('Title: A-Z');
+  const [shuffleState, setIsEnabled] = useState(false);
+  const [tagList, setTags] = useState(getAllTags('A-Z'));
   const [timeoutID, setTimeoutID] = useState<number | null>(null);
+
+  useEffect(() => {
+    const expFeatures = JSON.parse(localStorage.getItem('spicetify-exp-features') || '{}');
+    const navBarValue = expFeatures.enableGlobalNavBar?.value;
+    setNavBarValue(navBarValue);
+  }, []);
 
   // Updates playlist data when the active navigation bar tab changes.
   useEffect(() => {
@@ -115,6 +122,11 @@ const App = () => {
     setTags(getAllTags('A-Z'));
   };
 
+  // Styles the top spacing based on the "Show global nav bar with home button, search input and user avatar" experimental feature value.
+  const topSpacingStyle = {
+    marginTop: navBarValue !== 'control' ? '60px' : '0px', 
+  };
+
   // Renders different pages based on the active navigation bar tab.
   switch (activeLink) {
     case "Search":
@@ -186,6 +198,7 @@ const App = () => {
                 }
               `}
             </style>
+            <div className="top-spacing" style={topSpacingStyle}></div>
             <div className="input-wrapper">
               <PlayButton onClick={() => {addPlaylistsToQueue(playlistData, shuffleState)}} />
               <ShuffleButton shuffleState={shuffleState} toggleShuffle={toggleShuffle} />
@@ -282,6 +295,7 @@ const App = () => {
                   }
                 `}
               </style>
+              <div className="top-spacing" style={topSpacingStyle}></div>
               <div className='tag-list-wrapper'>
                 {
                   tagList.map((tag) => (
@@ -317,6 +331,7 @@ const App = () => {
               }
             `}
           </style>
+          <div className="top-spacing" style={topSpacingStyle}></div>
           <div className='all-playlists-page-sort-dropdown-wrapper'>
             <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A', 'No covers first']} onSelect={(value: string) => { setSortingOption(value) }} selected={selectedSortingOption} />
           </div>
@@ -329,6 +344,7 @@ const App = () => {
     case "README":
       return (
         <>
+          <div className="top-spacing" style={topSpacingStyle}></div>
           <README raw_url='https://raw.githubusercontent.com/Bergbok/Spicetify-Creations/main/CustomApps/playlist-tags/README.md' GitHub_button_url='https://github.com/Bergbok/Spicetify-Creations/tree/dist/playlist-tags'/>
           {navBar}
         </>
