@@ -44,7 +44,7 @@ const App = () => {
   const [timeoutID, setTimeoutID] = useState<number | null>(null);
 
   useEffect(() => {
-    const expFeatures = JSON.parse(localStorage.getItem('spicetify-exp-features') || '{}');
+    const expFeatures = JSON.parse(Spicetify.LocalStorage.get('spicetify-exp-features') || '{}');
     const navBarValue = expFeatures.enableGlobalNavBar?.value;
     setNavBarValue(navBarValue);
   }, []);

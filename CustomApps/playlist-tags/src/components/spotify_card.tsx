@@ -34,7 +34,7 @@ interface SpotifyCardProps {
 function SpotifyCard(props: SpotifyCardProps): React.ReactElement<HTMLDivElement> {
     // @ts-ignore
     const { Cards, TextComponent, ArtistMenu, AlbumMenu, PodcastShowMenu, PlaylistMenu, ContextMenu } = Spicetify.ReactComponent;
-    const { Default: Card, CardImage } = Cards;
+    const { FeatureCard: Card, CardImage } = Cards;
     const { type, header, uri, imageUrl, subheader, className } = props;
 
     const Menu = () => {
@@ -60,13 +60,8 @@ function SpotifyCard(props: SpotifyCardProps): React.ReactElement<HTMLDivElement
                     headerText={header}
                     renderCardImage={() => (
                         <CardImage
-                            images={[
-                                {
-                                    height: 640,
-                                    url: imageUrl,
-                                    width: 640,
-                                },
-                            ]}
+                            src={imageUrl}
+                            size={640}
                             isCircular={type === "artist"}/>
                     )}
                     renderSubHeaderContent={() => (
