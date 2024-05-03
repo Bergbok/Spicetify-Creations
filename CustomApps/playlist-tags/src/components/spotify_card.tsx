@@ -60,8 +60,14 @@ function SpotifyCard(props: SpotifyCardProps): React.ReactElement<HTMLDivElement
                     headerText={header}
                     renderCardImage={() => (
                         <CardImage
-                            src={imageUrl}
-                            size={640}/>
+                            images={[
+                                {
+                                    height: 640,
+                                    url: imageUrl,
+                                    width: 640,
+                                },
+                            ]}
+                            isCircular={type === "artist"}/>
                     )}
                     renderSubHeaderContent={() => (
                         <React.Fragment>
