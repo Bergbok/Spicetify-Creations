@@ -1,6 +1,6 @@
-import { MassTagOperation } from './types/mass_tag_operations.d';
-import { PlaylistContents } from './types/playlist_contents.d';
-import { PlaylistMetadata } from './types/playlist_metadata.d';
+import { MassTagOperation } from './types/mass_tag_operations';
+import { PlaylistContents } from './types/playlist_contents';
+import { PlaylistMetadata } from './types/playlist_metadata';
 import { renderElement } from '@shared/utils/react-utils';
 import { waitForElement } from '@shared/utils/dom-utils';
 import React from 'react';

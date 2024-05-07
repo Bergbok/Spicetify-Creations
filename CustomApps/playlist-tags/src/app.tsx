@@ -1,5 +1,5 @@
 import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists, removeStringFromStringArray, escapeRegExp } from './funcs';
-import { PlaylistMetadata } from './types/playlist_metadata.d'
+import { PlaylistMetadata } from './types/playlist_metadata'
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import FilterDropdown from './components/filter_dropdown';
 import PlayButton from './components/play_button';

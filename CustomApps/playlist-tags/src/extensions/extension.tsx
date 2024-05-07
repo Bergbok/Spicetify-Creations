@@ -1,5 +1,5 @@
 import { handlePageChange, getCurrentPageURI, getPlaylistTags, renderPlaylistPageElements, clearMetadataCache, clearAllTags, importTags, exportTags, appendTagsToFolderPlaylists, clearContentsCache, getLocalStorageKeySizes, removeTagFromAllPlaylists, appendTagToAllPlaylists, getTagCounts } from '../funcs';
-import { MassTagOperation } from '../types/mass_tag_operations.d';
+import { MassTagOperation } from '../types/mass_tag_operations';
 import { SettingsSection } from 'spcr-settings';
 import { version as CURRENT_VERSION } from '../../package.json';
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
