@@ -194,6 +194,9 @@ const App = () => {
                 }
                 .tag-search-bar:hover {
                   background-color: var(--background-elevated-highlight);
+                  border-color: #c8c8c821;
+                  border-width: 1px;
+                  border-style: solid;
                 }
                 .tag-search-bar:focus {
                   background-color: var(--background-elevated-highlight);
