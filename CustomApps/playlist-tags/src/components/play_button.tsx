@@ -28,6 +28,7 @@ const PlayButton = ({ onClick }: PlayButtonProps) => {
                     cursor: pointer;
                     background-color: var(--spice-button-active);
                     border-radius: 100%;
+                    border: 0;
                     height: 50px;
                     position: relative;
                     transition: transform 0.3s ease;

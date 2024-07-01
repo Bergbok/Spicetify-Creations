@@ -33,6 +33,7 @@ const App = () => {
   // React State Hooks 
   const [filterQuery, setFilterQuery] = useState('');
   const [inputFocused, setIsFocused] = useState(false);
+  const [inputHovered, setInputHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [navBar, activeLink, setActiveLink] = useNavigationBar(navbar_items);
   const [navBarValue, setNavBarValue] = useState('');
@@ -117,6 +118,14 @@ const App = () => {
     setIsFocused(!inputFocused);
   };
 
+  const handleMouseEnter = () => {
+    setInputHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setInputHovered(false);
+  };
+
   // Updates the tag list when a tag is removed from all playlists.
   const updateTagList = () => {
     setTags(getAllTags('A-Z'));
@@ -162,17 +171,21 @@ const App = () => {
                   width: 100%;
                   height: 48px;
                   color: var(--spice-text);
-                  background-color: rgb(36, 36, 36);
+                  background-color: var(--background-elevated-base);
                   padding: 5px;
                   border-radius: 9999px;
+                  border-width: 0;
                   margin: 0;
                   padding-left: 42px;
                 }
                 .tag-search-bar:hover {
-                  background-color: rgb(42, 42, 42);
+                  background-color: var(--background-elevated-highlight);
                 }
                 .tag-search-bar:focus {
-                  border-color: rgb(221, 221, 221);
+                  background-color: var(--background-elevated-highlight);
+                  border-color: rgb(255, 255, 255);
+                  border-width: 2px;
+                  border-style: solid;
                 }
                 .tag-list-wrapper {
                   display: flex;
@@ -204,7 +217,7 @@ const App = () => {
               <ShuffleButton shuffleState={shuffleState} toggleShuffle={toggleShuffle} />
               <div className='search-wrapper'>
                 <svg className="icon" width="24" height="24" viewBox="0 0 24 24"
-                  dangerouslySetInnerHTML={{ __html: inputFocused ? Spicetify.SVGIcons["search-active"] : Spicetify.SVGIcons["search"] }}>
+                  dangerouslySetInnerHTML={{ __html: (inputFocused || inputHovered) ? Spicetify.SVGIcons["search-active"] : Spicetify.SVGIcons["search"] }}>
                 </svg>
                 <input
                   className='tag-search-bar'
@@ -214,6 +227,8 @@ const App = () => {
                   value={filterQuery}
                   onFocus={toggleInputFocus}
                   onBlur={toggleInputFocus}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                   onChange={handleSearchChange}/>
               </div>
               <FilterDropdown items={['Match Any Tag (OR)', 'Match All Tags (AND)']} onSelect={(value: string) => { setFilterOption(value) }}></FilterDropdown>
