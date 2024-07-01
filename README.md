@@ -77,20 +77,6 @@ Threshold for [artist:VA] tag corresponds to the amount of artists a playlist ca
 
 > If you get stuck check out [Spicetify's official guide](https://spicetify.app/docs/advanced-usage/custom-apps/).
 
-## Planned Updates
-
-- [ ] Renaming tags
-- [ ] Improved "All Tags" page
-- [x] "Add artist name tag to playlists containing only one artist" option
-- [x] "Add unplayable tag to playlists without playable tracks" option
-- [x] "Add year tag to playlists containg year in description" option
-- [x] No assigned cover images first sorting option
-- [x] Debouncing (performance improvement)
-- [x] Improved "All Tagged Playlists" page
-- [x] Switch to IndexedDB (scrapped)
-- [x] Case insensitive searching
-- [x] AND/OR filter options
-
 If you have any feature requests/bug reports feel free to [open a issue](https://github.com/Bergbok/Spicetify-Creations/issues/new/choose)!
 
 ## Credits
