@@ -378,7 +378,7 @@ export function getCurrentPageURI() {
  * @returns {Promise<PlaylistMetadata[]>} A Promise that resolves with the metadata of the playlists.
  */
 export async function getPlaylistMetadata(playlist_uris: string[]): Promise<PlaylistMetadata[]> {
-  const use_cache = JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.use-metadata-cache') || 'false').value;
+  const use_cache = JSON.parse(Spicetify.LocalStorage.get('playlist-tags-cache-settings.use-contents-cache') || 'false').value;
   const data = await Promise.all(playlist_uris.map(async (uri) => {
     if (use_cache) {
       let metadata_cache: PlaylistMetadata;
@@ -629,7 +629,7 @@ export function getTagCounts(): string {
  */
 export async function addPlaylistsToQueue(playlist_data: PlaylistMetadata[], shuffle: boolean): Promise<void> {
   Spicetify.showNotification('Processing ' + playlist_data.length + ' playlists...');
-  const use_cache = JSON.parse(Spicetify.LocalStorage.get('playlist-tags-settings.use-contents-cache') || 'false').value;
+  const use_cache = JSON.parse(Spicetify.LocalStorage.get('playlist-tags-cache-settings.use-contents-cache') || 'false').value;
   let track_list: Spicetify.ContextTrack[] = [];
   var contents_cache: string = '';
   for (const playlist of playlist_data) {
