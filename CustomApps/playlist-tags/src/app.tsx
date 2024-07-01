@@ -1,4 +1,4 @@
-import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists, removeStringFromStringArray, escapeRegExp } from './funcs';
+import { renderPlaylists, getPlaylistMetadata, getCurrentPageURI, getPlaylistsTaggedAs, getAllTags, addPlaylistsToQueue, removeTagFromAllPlaylists, removeStringFromStringArray, escapeRegExp, getUntaggedPlaylistURIs } from './funcs';
 import { PlaylistMetadata } from './types/playlist_metadata'
 import { waitForSpicetify, waitForPlatformApi } from '@shared/utils/spicetify-utils';
 import FilterDropdown from './components/filter_dropdown';
@@ -15,13 +15,16 @@ import useNavigationBar from 'spcr-navigation-bar';
  */
 const App = () => {
   // Handles which items to display in the navigation bar based on user settings
-  const default_navbar_items = ["Search", "All Tags", "All Tagged Playlists", "README"];
+  const default_navbar_items = ["Search", "All Tags", "All Tagged Playlists", "All Untagged Playlists", "README"];
   let navbar_items = default_navbar_items;
   if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-all-tags-page') || 'false').value) {
     navbar_items = navbar_items.filter(item => item !== "All Tags");
   }
   if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-all-tagged-playlists-page') || 'false').value) {
     navbar_items = navbar_items.filter(item => item !== "All Tagged Playlists");
+  }
+  if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-all-untagged-playlists-page') || 'false').value) {
+    navbar_items = navbar_items.filter(item => item !== "All Untagged Playlists");
   }
   if (!JSON.parse(Spicetify.LocalStorage.get('playlist-tags-navbar-settings.navbar-README') || 'false').value) {
     navbar_items = navbar_items.filter(item => item !== "README");
@@ -52,25 +55,36 @@ const App = () => {
 
   // Updates playlist data when the active navigation bar tab changes.
   useEffect(() => {
-    if (activeLink === 'Search') {
-      const tags = [getCurrentPageURI()];
-      setFilterQuery(tags.map(tag => tag).join(' '));
-      const playlist_uris = getPlaylistsTaggedAs(tags, selectedFilterOption);
-      setIsLoading(true);
-      getPlaylistMetadata(playlist_uris).then(data => {
-        setPlaylistData(data);
-        setIsLoading(false);
-      });
-    }
-    if (activeLink === 'All Tagged Playlists') {
-      const stored_value = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
-      const playlist_uris = stored_value ? JSON.parse(stored_value) : [];
-      setIsLoading(true);
-      getPlaylistMetadata(playlist_uris).then(data => {
-        setPlaylistData(data);
-        setIsLoading(false);
-      });
-    }
+    const fetchData = async () => {
+      if (activeLink === 'Search') {
+        const tags = [getCurrentPageURI()];
+        setFilterQuery(tags.map(tag => tag).join(' '));
+        const playlist_uris = getPlaylistsTaggedAs(tags, selectedFilterOption);
+        setIsLoading(true);
+        getPlaylistMetadata(playlist_uris).then(data => {
+          setPlaylistData(data);
+          setIsLoading(false);
+        });
+      }
+      if (activeLink === 'All Tagged Playlists') {
+        const stored_value = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
+        const playlist_uris = stored_value ? JSON.parse(stored_value) : [];
+        setIsLoading(true);
+        getPlaylistMetadata(playlist_uris).then(data => {
+          setPlaylistData(data);
+          setIsLoading(false);
+        });
+      }
+      if (activeLink === 'All Untagged Playlists') {
+        const untagged_playlist_uris = await getUntaggedPlaylistURIs();
+        setIsLoading(true);
+        getPlaylistMetadata(untagged_playlist_uris).then(data => {
+          setPlaylistData(data);
+          setIsLoading(false);
+        });
+      }
+    };
+    fetchData();
   }, [activeLink]);
 
   // Updates playlist data when the selected filter option changes.
@@ -348,6 +362,27 @@ const App = () => {
           </style>
           <div className="top-spacing" style={topSpacingStyle}></div>
           <div className='all-playlists-page-sort-dropdown-wrapper'>
+            <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A', 'No covers first']} onSelect={(value: string) => { setSortingOption(value) }} selected={selectedSortingOption} />
+          </div>
+          {
+            playlistData && renderPlaylists(playlistData, selectedSortingOption, isLoading, filterQuery)
+          }
+          {navBar}
+        </>
+      );
+    case "All Untagged Playlists":
+      return (
+        <>
+          <style>
+            {`
+              .all-untagged-playlists-page-sort-dropdown-wrapper {
+                padding-left: calc(50% - 110px);
+                padding-bottom: 15px;
+              }
+            `}
+          </style>
+          <div className="top-spacing" style={topSpacingStyle}></div>
+          <div className='all-untagged-playlists-page-sort-dropdown-wrapper'>
             <SortDropdown items={['Title: A-Z', 'Title: Z-A', 'Description: A-Z', 'Description: Z-A', 'No covers first']} onSelect={(value: string) => { setSortingOption(value) }} selected={selectedSortingOption} />
           </div>
           {

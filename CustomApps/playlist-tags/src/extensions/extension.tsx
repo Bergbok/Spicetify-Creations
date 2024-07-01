@@ -31,7 +31,7 @@ async function registerSettings() {
   await settings.pushSettings();
 
   const import_export_settings = new SettingsSection('Import / Export', 'playlist-tags-import-export-settings');
-  import_export_settings.addButton('button-import-tags', 'Import tags from clipboard', 'Import', async () => {
+    import_export_settings.addButton('button-import-tags', 'Import tags from clipboard', 'Import', async () => {
       const imported_tag_count = importTags(await Spicetify.Platform.ClipboardAPI.paste());
       Spicetify.showNotification('Imported ' + imported_tag_count + ' playlist\'s tags!');
     });
@@ -45,6 +45,7 @@ async function registerSettings() {
   settings = new SettingsSection('Navigation Bar', 'playlist-tags-navbar-settings');
     settings.addToggle('navbar-all-tags-page', '• All Tags', true);
     settings.addToggle('navbar-all-tagged-playlists-page', '• All Tagged Playlists', true);
+    settings.addToggle('navbar-all-untagged-playlists-page', '• All Untagged Playlists', true);
     settings.addToggle('navbar-README', '• README', true);
   await settings.pushSettings();
 

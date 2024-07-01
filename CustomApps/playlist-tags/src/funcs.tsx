@@ -444,6 +444,47 @@ export function getPlaylistsTaggedAs(tags: string[], filter_option: string): str
   }
 };
 
+/** 
+ * Gets all of the users playlists by recursively looping through and filtering the rootlist.
+ * 
+ * @returns {Promise<any[]>} A Promise that resolves with an array of playlists.
+ */
+async function getAllPlaylists() {
+  const rootlist = await Spicetify.Platform.RootlistAPI.getContents();
+
+  let playlists: any[] = [];
+
+  // Recursive function to process each item
+  function processItem(item: any) {
+      if (item.type === "playlist") {
+          playlists.push(item); // Add playlist to the result
+      } else if (item.type === "folder") {
+          item.items.forEach(processItem); // Recursively process items in the folder
+      }
+  }
+
+  rootlist.items.forEach(processItem); // Start processing with the top-level items
+  return playlists;
+}
+
+/**
+ * Gets all of the users untagged playlists.
+ * 
+ * @returns {Promise<string[]>} A Promise that resolves with an array of URIs for untagged playlists.
+ */
+export async function getUntaggedPlaylistURIs(): Promise<string[]> {
+  const stored_value = Spicetify.LocalStorage.get('tags:taggedPlaylistURIs');
+  const tagged_playlist_uris = stored_value ? JSON.parse(stored_value) : [];
+
+  const untagged_playlists = (await getAllPlaylists()).filter((playlist: any) => !tagged_playlist_uris.includes(playlist.uri.replace('spotify:playlist:', '')));
+
+  const untagged_playlist_uris = untagged_playlists.map((playlist: any) => playlist.uri.replace('spotify:playlist:', '')); 
+  
+  console.log(untagged_playlist_uris)
+
+  return untagged_playlist_uris;
+}
+
 //////////////////////////////////////// TRIMMING FUNCTIONS ////////////////////////////////////////
 
 /**
@@ -579,7 +620,7 @@ export function importTags(tags: string): number {
 /**
  * Exports all tags from local storage.
  * 
- * @param {boolean} [exclude_contains_local_files_tag] - Whether to exclude playlists tagged as [contains-local-files].
+ * @param {boolean} exclude_contains_local_files_tag - Whether to exclude playlists tagged as [contains-local-files].
  * @returns {string} A string containing importable tags.
  */
 export function exportTags(exclude_contains_local_files_tag: boolean): string {
