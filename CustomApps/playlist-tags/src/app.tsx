@@ -297,7 +297,7 @@ const App = () => {
                               break;
                           }
                         }}
-                        onContextMenu={() => {removeTagFromAllPlaylists(new RegExp(escapeRegExp(tag))); setFilterQuery(removeStringFromStringArray(filter_query_terms, tag)); updateTagList()}}>{/* {tag} */}
+                        onContextMenu={() => {removeTagFromAllPlaylists(new RegExp((`^${escapeRegExp(tag)}$`))); setFilterQuery(removeStringFromStringArray(filter_query_terms, tag)); updateTagList()}}>{/* {tag} */}
                         <p dangerouslySetInnerHTML={{ __html: `<span style="color: ${filterQuery.replace(/!/g, '').split(' ').includes(tag) ? 'black' : 'var(--spice-text)'}">${tag}</span>` }}></p>
                       </SpotifyChip>
                     );
@@ -342,7 +342,7 @@ const App = () => {
                         }
                         setActiveLink('Search');
                       }}
-                      onContextMenu={() => {removeTagFromAllPlaylists(new RegExp(tag)); updateTagList()}}>{tag}
+                      onContextMenu={() => {removeTagFromAllPlaylists(new RegExp(`^${escapeRegExp(tag)}$`)); updateTagList()}}>{tag}
                     </SpotifyChip>
                   ))
                 }
