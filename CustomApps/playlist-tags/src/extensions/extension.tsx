@@ -167,7 +167,7 @@ function registerFolderContextMenuItem() {
     renderPlaylistPageElements(getPlaylistTags(getCurrentPageURI()));
   }
 
-  Spicetify.Platform.History.listen((location: Location) => {
-    handlePageChange(location);
+  Spicetify.Platform.History.listen(async (location: Location) => {
+    await handlePageChange(location);
   });
 })();

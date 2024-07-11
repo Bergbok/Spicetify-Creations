@@ -479,7 +479,7 @@ export async function getUntaggedPlaylistURIs(): Promise<string[]> {
   const untagged_playlists = (await getAllPlaylists()).filter((playlist: any) => !tagged_playlist_uris.includes(playlist.uri.replace('spotify:playlist:', '')));
 
   const untagged_playlist_uris = untagged_playlists.map((playlist: any) => playlist.uri.replace('spotify:playlist:', '')); 
-  
+
   return untagged_playlist_uris;
 }
 
@@ -835,18 +835,18 @@ function sortTags(tags: string[], sorting_option: string): string[] {
  * 
  * @param {Location} location - The location object to use.
  */
-export function handlePageChange(location: Location): void {
+export async function handlePageChange(location: Location): Promise<void> {
   let current_playlist_uri = getCurrentPageURI();
   if (location.pathname.startsWith('/playlist/')) {
     let previous_playlist_url = current_playlist_uri;
     current_playlist_uri = getCurrentPageURI();
     if (previous_playlist_url === current_playlist_uri) {
-      removePlaylistPageElements();
+      await removePlaylistPageElements();
     }
     let tags = getPlaylistTags(current_playlist_uri);
-    renderPlaylistPageElements(tags);
+    await renderPlaylistPageElements(tags);
   } else {
-    removePlaylistPageElements();
+    await removePlaylistPageElements();
   }
 };
 
@@ -958,10 +958,10 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
   container.style.display = 'flex';
   container.style.flexWrap = 'wrap';
   container.style.marginTop = '4px';
-  container.style.marginLeft = '25px';
   container.style.marginBottom = '16px';
 
-  if (Spicetify.Config.current_theme == 'Comfy') {
+  if (Spicetify.Config.current_theme === 'Comfy') {
+    container.style.marginLeft = '18px';
     container.style.marginBottom = '30px';
   }
 
@@ -984,10 +984,10 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
             className='tag-list-tag'
             semanticColor='textBase'
             onClick={() => Spicetify.Platform.History.push('/playlist-tags/' + tag)}
-            onContextMenu={() => {
+            onContextMenu={async () => {
               removeTag(getCurrentPageURI(), tag); 
-              removePlaylistPageElements(); 
-              renderPlaylistPageElements(getPlaylistTags(getCurrentPageURI()));}}
+              await removePlaylistPageElements(); 
+              await renderPlaylistPageElements(getPlaylistTags(getCurrentPageURI()));}}
           >{tag}
           </Chip>
         ))
@@ -1002,15 +1002,17 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
   );
 
   renderElement(<TagList/>, container);
-  // await removeTopbarButton();
-  // renderTopbarButton();
-
-  await waitForElement('div.playlist-playlist-playlistContent');
-
-  const target = await waitForElement('#main > div > div.Root__top-container > div.Root__main-view > div.main-view-container > div.main-view-container__scroll-node > div:nth-child(2) > div.main-view-container__scroll-node-child > main > div > section > div.playlist-playlist-playlistContent > div:nth-child(2) > div:nth-child(2) > div');
-  if (target !== null) {
-    target.parentNode?.insertBefore(container, target.nextSibling);
+  
+  try {
+    const target = await waitForElement('div.playlist-playlist-playlistContent > div.contentSpacing', 10000);
+    if (target !== null) {
+      target.insertBefore(container, target.firstChild);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
     isRenderingPlaylistPageElements = false;
+    return;
   }
 };
   
@@ -1020,7 +1022,6 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
 async function removePlaylistPageElements(): Promise<void> {
-  // await removeTopbarButton();
   const tagListElements = document.getElementsByClassName('tag-list');
   Array.from(tagListElements).forEach(element => {
     element.remove();
