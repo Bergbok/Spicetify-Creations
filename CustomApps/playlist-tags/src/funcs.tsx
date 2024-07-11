@@ -543,7 +543,7 @@ export function clearAllTags(): void {
  */
 export function clearMetadataCache(): void {
   getAllTagKeys().forEach(key => {
-    if (key.startsWith('tags:cache:')){
+    if (key.startsWith('tags:cache:metadata:')){
       Spicetify.LocalStorage.remove(key);
     }
   });
