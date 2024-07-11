@@ -97,7 +97,6 @@ async function registerSettings() {
     removal_settings.addButton('button-mass-removal', 'Remove all tags that match:', 'Remove', () => {
       const regex = new RegExp(removal_settings.getFieldValue('mass-removal-regex'));
       const less_than_count = parseInt(removal_settings.getFieldValue('mass-removal-less-than-count'));
-      console.log(less_than_count);
       removeTagFromAllPlaylists(regex, less_than_count);
       Spicetify.showNotification('Removed tags!');
     });

@@ -480,8 +480,6 @@ export async function getUntaggedPlaylistURIs(): Promise<string[]> {
 
   const untagged_playlist_uris = untagged_playlists.map((playlist: any) => playlist.uri.replace('spotify:playlist:', '')); 
   
-  console.log(untagged_playlist_uris)
-
   return untagged_playlist_uris;
 }
 
