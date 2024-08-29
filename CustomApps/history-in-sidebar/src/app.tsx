@@ -2,10 +2,16 @@ import React from 'react'
 
 class App extends React.Component {
   componentDidMount() {
-    Spicetify.Platform.LocalStorageAPI.setItem('queue-view', 'history');
-
-    // Opens the right sidebar if it's closed
-    const queue_button = document.querySelector('button[data-restore-focus-key="queue"][data-active="false"]') as HTMLButtonElement;
+    const current_view: string = Spicetify.Platform.LocalStorageAPI.getItem('queue-view');
+    const queue_button_selector = current_view === 'history' 
+      ? 'button[data-restore-focus-key="queue"]' 
+      : 'button[data-restore-focus-key="queue"][data-active="false"]';
+    
+    if (current_view !== 'history') {
+      Spicetify.Platform.LocalStorageAPI.setItem('queue-view', 'history');
+    }
+    
+    const queue_button = document.querySelector(queue_button_selector) as HTMLButtonElement;
     if (queue_button) {
       queue_button.click();
     }
