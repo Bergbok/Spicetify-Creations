@@ -2,7 +2,7 @@
 
 Adds a shortcut for the "Recently Played" screen to the sidebar.
 
-Saves one full click!
+Saves 1-2 full clicks!
 
 > If you like it, please consider starring it on GitHub 🌟
 
