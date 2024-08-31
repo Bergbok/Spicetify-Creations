@@ -1,8 +1,6 @@
 # History in Sidebar
 
-Adds a shortcut for the "Recently Played" screen to the sidebar.
-
-Saves 1-2 full clicks!
+Adds a shortcut to the "Recently Played" panel to the sidebar.
 
 > If you like it, please consider starring it on GitHub 🌟
 
