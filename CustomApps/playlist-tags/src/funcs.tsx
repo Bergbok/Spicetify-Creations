@@ -920,7 +920,7 @@ export function renderPlaylists(playlist_data: PlaylistMetadata[], sorting_optio
       `}
       </style>
       {is_loading ? (<h1 className='loading-text'>Loading...</h1>) : (
-        filter_query !== '' && playlist_data.length === 0 ? (<h1 className='loading-text'>No playlists found for query</h1>) :
+        /\S/.test(filter_query) && playlist_data.length === 0 ? (<h1 className='loading-text'>No playlists found for query</h1>) :
           <div className='card-wrapper'>
             {
               playlist_data.map((playlist: PlaylistMetadata) => (
