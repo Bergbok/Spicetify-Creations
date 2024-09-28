@@ -1004,7 +1004,13 @@ export async function renderPlaylistPageElements(tags: string[]): Promise<void> 
   renderElement(<TagList/>, container);
   
   try {
-    const target = await waitForElement('div.playlist-playlist-playlistContent > div.contentSpacing', 10000);
+    let target_selector: string = ''
+    if (Spicetify.Platform.version >= '1.2.46') {
+      target_selector = 'div.playlist-playlist-playlistContent > div.main-useDropTarget-base  > div.contentSpacing';
+    } else {
+      target_selector = 'div.playlist-playlist-playlistContent > div.contentSpacing';
+    }
+    const target = await waitForElement(target_selector, 10000);
     if (target !== null) {
       target.insertBefore(container, target.firstChild);
     }
