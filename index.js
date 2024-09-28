@@ -26,7 +26,7 @@ var playlistDtags=(()=>{var I,V=Object.create,l=Object.defineProperty,z=Object.g
           left: 50%;
           transform: translate(-50%, -50%);
         }
-      `),t?s.default.createElement("h1",{className:"loading-text"},"Loading..."):""!==a&&0===e.length?s.default.createElement("h1",{className:"loading-text"},"No playlists found for query"):s.default.createElement("div",{className:"card-wrapper"},e.map(e=>{return s.default.createElement(J,{className:"playlist-card",type:"playlist",uri:e.uri,header:e.name,subheader:e.description,imageUrl:null==(e=e.images[0])?void 0:e.url})})))}function le(e){return Spicetify.Platform?.[e]}async function ne(e){return async function(e){let r=e();for(;void 0===r;)await new Promise(e=>setTimeout(e,100)),r=e();return r}(()=>le(e))}var a=r(t()),ie=({items:e,onSelect:r})=>a.default.createElement(a.default.Fragment,null,a.default.createElement("style",null,`
+      `),t?s.default.createElement("h1",{className:"loading-text"},"Loading..."):/\S/.test(a)&&0===e.length?s.default.createElement("h1",{className:"loading-text"},"No playlists found for query"):s.default.createElement("div",{className:"card-wrapper"},e.map(e=>{return s.default.createElement(J,{className:"playlist-card",type:"playlist",uri:e.uri,header:e.name,subheader:e.description,imageUrl:null==(e=e.images[0])?void 0:e.url})})))}function le(e){return Spicetify.Platform?.[e]}async function ne(e){return async function(e){let r=e();for(;void 0===r;)await new Promise(e=>setTimeout(e,100)),r=e();return r}(()=>le(e))}var a=r(t()),ie=({items:e,onSelect:r})=>a.default.createElement(a.default.Fragment,null,a.default.createElement("style",null,`
                 .filter-dropdown-wrapper {
                     padding-left: 10px; 
                     width: max-content;
