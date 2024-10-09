@@ -68,7 +68,7 @@ Threshold for [artist:VA] tag corresponds to the amount of artists a playlist ca
 ## Installation
 
 1. Install Spicetify ([guide](https://spicetify.app/docs/advanced-usage/installation))
-2. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/playlist-tags.zip)
+2. Download the custom app from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/playlist-tags.zip)
 3. Run `spicetify config-dir` in a terminal
 4. Extract the zip into the CustomApps folder
 5. Rename the extracted folder to `playlist-tags`
