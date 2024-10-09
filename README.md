@@ -11,7 +11,7 @@ Adds a shortcut to the "Recently Played" panel to the sidebar.
 ## Installation
 
 1. Install Spicetify ([guide](https://spicetify.app/docs/advanced-usage/installation))
-2. Download it from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/history-in-sidebar.zip)
+2. Download the custom app from [here](https://github.com/Bergbok/Spicetify-Creations/archive/refs/heads/dist/history-in-sidebar.zip)
 3. Run `spicetify config-dir` in a terminal
 4. Extract the zip into the CustomApps folder
 5. Rename the extracted folder to `history-in-sidebar`
